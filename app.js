@@ -1,10 +1,18 @@
+// Sayfa tamamen yüklendiğinde tüm kodların çalışmasını sağlar
 document.addEventListener('DOMContentLoaded', () => {
+
+    // ====================================================================
+    // YARDIMCI FONKSİYON: Resim yollarını sayısal verilere göre yorumlayıp ikonlara çevirir.
+    // ====================================================================
     function getDisplayContent(header, cellValue) {
+        // Eğer hücre boşsa veya resim yolu değilse, değeri olduğu gibi geri döndür.
         if (!cellValue || typeof cellValue !== 'string' || !cellValue.endsWith('.png')) {
             return cellValue;
         }
 
+        // Rüzgar ve Dalga Yönü için ok ikonları oluştur
         if (header.includes('Yonu')) {
+            // Dosya adından dereceyi (örn: 222, 318) al
             const match = cellValue.match(/(\d+)/);
             if (match) {
                 const angle = parseInt(match[0], 10);
@@ -19,18 +27,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Hava Durumu için hava durumu ikonları oluştur
         if (header.includes('Hava Durumu')) {
             if (cellValue.includes('acik')) return '☀️';
             if (cellValue.includes('yagmurlu')) return '🌧️';
             if (cellValue.includes('bulutlu')) return '☁️';
         }
 
-        return '';
+        return ''; // Eşleşme bulunamazsa boş döndür
     }
 
+    // ====================================================================
+    // ANA İŞLEM: veriler.json'dan verileri çekip HTML tablosunu oluşturur.
+    // ====================================================================
     fetch('veriler.json')
         .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
+            if (!response.ok) { throw new Error('Network response was not ok'); }
             return response.json();
         })
         .then(data => {
@@ -41,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const headers = Object.keys(data[0]);
             const headerRow = document.createElement('tr');
-
             headers.forEach(headerText => {
                 const th = document.createElement('th');
                 th.textContent = headerText;
@@ -53,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const row = document.createElement('tr');
                 headers.forEach(header => {
                     const cell = document.createElement('td');
+                    // Hücre içeriğini oluşturmak için yardımcı fonksiyonu kullan
                     cell.textContent = getDisplayContent(header, kayit[header]);
                     row.appendChild(cell);
                 });
@@ -63,15 +75,15 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Tablo oluşturulurken hata oluştu:', error);
             const tableBody = document.getElementById('table-body');
             if (tableBody) {
-                tableBody.innerHTML = `
-                    <tr>
-                        <td colspan="10" style="color: red; text-align:center;">
-                            Veriler yüklenemedi. Lütfen daha sonra tekrar deneyin.
-                        </td>
-                    </tr>`;
+                tableBody.innerHTML = '<tr><td colspan="10" style="color: red; text-align:center;">Veriler yüklenemedi. Lütfen daha sonra tekrar deneyin.</td></tr>';
             }
         });
 
+    // ====================================================================
+    // BUTON İŞLEVLERİ (Aynı kalıyor)
+    // ====================================================================
+
+    // 1. Paylaş Butonu
     const shareButton = document.getElementById('shareButton');
     const shareFeedback = document.getElementById('shareFeedback');
 
@@ -80,27 +92,26 @@ document.addEventListener('DOMContentLoaded', () => {
             navigator.clipboard.writeText(window.location.href)
                 .then(() => {
                     shareFeedback.textContent = 'Link kopyalandı!';
-                    setTimeout(() => {
-                        shareFeedback.textContent = '';
-                    }, 2000);
+                    setTimeout(() => { shareFeedback.textContent = ''; }, 2000);
                 })
                 .catch(err => {
-                    console.error('Link kopyalanamadı:', err);
+                    console.error('Link kopyalanamadı: ', err);
                 });
         });
     }
 
+    // 2. PDF İndirme Butonu
     const downloadPdfButton = document.getElementById('downloadPdfButton');
 
     if (downloadPdfButton) {
         downloadPdfButton.addEventListener('click', () => {
             const element = document.getElementById('data-table');
             const opt = {
-                margin: 0.5,
-                filename: 'deniz-durum-tablosu.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
+              margin:       0.5,
+              filename:     'deniz-durum-tablosu.pdf',
+              image:        { type: 'jpeg', quality: 0.98 },
+              html2canvas:  { scale: 2 },
+              jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
             };
             html2pdf().from(element).set(opt).save();
         });

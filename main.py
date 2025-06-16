@@ -10,7 +10,7 @@ HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
 }
 
-# --- Dosya Yolu Ayarları (Otomasyon ile uyumlu) ---
+# --- Dosya Yolu Ayarları ---
 script_dir = os.path.dirname(os.path.abspath(__file__))
 json_path = os.path.join(script_dir, 'veriler.json')
 
@@ -35,34 +35,25 @@ def fetch_and_save_data():
     data_string = None
     header_string = None
 
-    # Tüm script bloklarını gez
     for script in scripts:
         if not script.string:
             continue
 
-        # AKILLI YÖNTEM: Sadece ana tabloyu dolduran veri bloğunu hedefle.
-        # 'var arr = [...]' tanımını ve hemen ardından gelen 'mygrid.parse(arr,...)' kullanımını
-        # aynı anda arayan bir Regex deseni kullanıyoruz.
+        # HEDEFE KİLİTLİ YÖNTEM: Sadece ana tabloyu dolduran veri bloğunu hedefle.
+        # Bu Regex, `var arr` tanımını ve onu hemen takip eden `mygrid.parse` komutunu bir bütün olarak arar.
         match = re.search(r'var arr = (\[\[.*?\]\]);\s*mygrid\.parse\(arr,"jsarray"\);', script.string, re.DOTALL)
 
         if match:
-            # Doğru veri bloğunu bulduk.
             data_string = match.group(1)
-
-            # Aynı script bloğu içindeki başlıkları da bulalım.
             header_match = re.search(r'mygrid\.setHeader\("(.*?)"', script.string)
             if header_match:
                 header_string = header_match.group(1)
-
-            # Doğru veriyi bulduğumuz için döngüden hemen çıkabiliriz.
             break
 
-    # Veri ve başlık bulunduktan sonra JSON dosyasına yaz
     if data_string and header_string:
         print("Doğru tablo verileri bulundu, işleniyor...")
         try:
             headers_list = [h.strip() for h in header_string.split(',')]
-            # JSON'un doğru işlemesi için tek tırnakları çift tırnakla değiştiriyoruz
             json_compatible_data_string = data_string.replace("'", '"')
             table_data = json.loads(json_compatible_data_string)
 
@@ -70,18 +61,15 @@ def fetch_and_save_data():
             for row in table_data:
                 record = {}
                 for i, header in enumerate(headers_list):
-                    if i < len(row):
-                        record[header] = row[i]
-                    else:
-                        record[header] = ""
+                    record[header] = row[i] if i < len(row) else ""
                 formatted_data.append(record)
 
             with open(json_path, 'w', encoding='utf-8') as f:
                 json.dump(formatted_data, f, ensure_ascii=False, indent=4)
 
             print(f"✅ Başarıyla tamamlandı! En güncel ve DOĞRU veriler '{json_path}' dosyasına kaydedildi.")
-        except json.JSONDecodeError as e:
-            print(f"HATA: Ayıklanan veri JSON formatına çevrilirken hata oluştu: {e}")
+        except Exception as e:
+            print(f"HATA: Veri işlenirken bir sorun oluştu: {e}")
     else:
         print("HATA: Sitenin kod yapısı içinde beklenen ana tablo verisi bulunamadı.")
 

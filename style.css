@@ -16,13 +16,21 @@ h1 {
 }
 
 main {
-    display: flex;
-    justify-content: center;
+    width: 100%; /* Main elementinin tam genişliği kullanmasını sağlar */
 }
 
+/* YENİ: Tabloyu kaydırılabilir yapan kapsayıcı stili */
+.table-container {
+    width: 95%; /* Ekranın %95'ini kaplar */
+    margin: 0 auto; /* Kapsayıcıyı sayfada ortalar */
+    overflow-x: auto; /* EN ÖNEMLİ KURAL: İçerik sığmazsa yatay kaydırma çubuğu gösterir */
+    -webkit-overflow-scrolling: touch; /* iOS cihazlarda daha akıcı bir kaydırma deneyimi sunar */
+}
+
+
 table {
-    width: 90%;
-    max-width: 1200px;
+    width: 100%; /* Tablonun, kapsayıcısının %100'ünü doldurmasını sağlar */
+    min-width: 800px; /* Tablonun okunabilirliğini korumak için minimum genişlik belirler */
     border-collapse: collapse;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #fff;
@@ -52,9 +60,9 @@ td img {
     vertical-align: middle;
 }
 
-#shareButton {
-    background-color: #03dac6;
-    color: #121212;
+/* --- BUTON STİLLERİ --- */
+
+#shareButton, #downloadPdfButton {
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -63,6 +71,11 @@ td img {
     font-size: 15px;
     margin-top: 10px;
     transition: background-color 0.3s;
+}
+
+#shareButton {
+    background-color: #03dac6;
+    color: #121212;
 }
 
 #shareButton:hover {
@@ -73,15 +86,7 @@ td img {
 #downloadPdfButton {
     background-color: #c62828;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 15px;
-    margin-top: 10px;
     margin-left: 10px;
-    transition: background-color 0.3s;
 }
 
 #downloadPdfButton:hover {

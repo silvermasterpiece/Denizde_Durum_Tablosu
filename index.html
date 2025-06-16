@@ -6,7 +6,8 @@
     <title>Deniz Durumu Tablosu</title>
     <link rel="stylesheet" href="style.css">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- PDF oluşturmak için gerekli kütüphane -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" xintegrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </head>
 <body>
@@ -22,12 +23,17 @@
     </header>
 
     <main>
-        <table id="data-table">
-            <thead id="table-headers">
+        <!-- YENİ: Mobil cihazlarda kaydırmayı sağlamak için tabloyu bir div içine aldık -->
+        <div class="table-container">
+            <table id="data-table">
+                <thead id="table-headers">
+                    <!-- Başlıklar JavaScript ile eklenecek -->
                 </thead>
-            <tbody id="table-body">
+                <tbody id="table-body">
+                    <!-- Veri satırları JavaScript ile eklenecek -->
                 </tbody>
-        </table>
+            </table>
+        </div>
     </main>
 
     <script src="app.js"></script>

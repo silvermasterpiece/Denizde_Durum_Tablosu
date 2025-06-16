@@ -89,32 +89,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. PDF İndirme Butonu (GELİŞMİŞ SIĞDIRMA DÜZELTMESİ)
+    // 2. PDF İndirme Butonu (MOBİL UYUMLU NİHAİ DÜZELTME)
     if (downloadPdfButton) {
         downloadPdfButton.addEventListener('click', () => {
-            const element = document.getElementById('data-table');
+            const body = document.querySelector('body');
+            const tableToPrint = document.getElementById('data-table');
 
-            // PDF sığdırma ayarları nihai olarak optimize edildi
+            // PDF oluşturmadan önce "PDF Modu"nu aktif et
+            body.classList.add('pdf-export-view');
+
             const opt = {
-              margin:       [0.2, 0.1, 0.2, 0.1], // Kenar boşlukları (Üst, Sol, Alt, Sağ)
+              margin:       0.3,
               filename:     'deniz-durum-tablosu.pdf',
               image:        { type: 'jpeg', quality: 0.95 },
-              html2canvas:  {
-                  scale: 2, // Yüksek çözünürlük için
-                  useCORS: true,
-                  // EN ÖNEMLİ AYARLAR: Tablonun tam genişliğini yakalamasını sağlar
-                  width: element.scrollWidth,
-                  windowWidth: element.scrollWidth
-              },
-              jsPDF:        {
-                  unit: 'in',
-                  format: 'a3', // Daha geniş bir kağıt formatı kullanır
-                  orientation: 'landscape' // Yatay mod
-              }
+              html2canvas:  { scale: 2 },
+              jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
             };
 
-            // PDF oluşturma işlemi
-            html2pdf().from(element).set(opt).save();
+            // html2pdf'yi çağır ve işlem bittiğinde "PDF Modu"nu kaldır
+            html2pdf().from(tableToPrint).set(opt).save().then(() => {
+                body.classList.remove('pdf-export-view');
+            }).catch((err) => {
+                console.error("PDF oluşturulurken hata oluştu:", err);
+                body.classList.remove('pdf-export-view'); // Hata durumunda bile modu kaldır
+            });
         });
     }
 });

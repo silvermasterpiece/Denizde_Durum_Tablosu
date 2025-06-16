@@ -4,13 +4,13 @@ body {
     background-color: #f0f2f5;
     color: #333;
     margin: 0;
-    padding: 0; /* Body'den tüm padding'i kaldırıyoruz */
+    padding: 0;
 }
 
 /* Başlık bölümü */
 header {
     text-align: center;
-    padding: 20px 10px; /* Başlığa kendi padding'ini veriyoruz */
+    padding: 20px 10px;
     margin-bottom: 0;
 }
 
@@ -25,19 +25,19 @@ main {
     width: 100%;
 }
 
-/* Tabloyu kaydırılabilir yapan kapsayıcı stili (SON GÜNCELLEME) */
+/* Tabloyu kaydırılabilir yapan kapsayıcı stili */
 .table-container {
-    width: 100%; /* Kapsayıcının tam genişliği kullanmasını sağlar */
-    overflow-x: auto; /* EN ÖNEMLİ KURAL: İçerik sığmazsa yatay kaydırma çubuğu gösterir */
-    -webkit-overflow-scrolling: touch; /* iOS için akıcı kaydırma */
-    box-sizing: border-box; /* Padding ve border'ın genişliğe dahil olmasını sağlar */
-    padding: 0 10px 20px 10px; /* Sayfanın kenar boşluklarını artık bu kapsayıcıya veriyoruz */
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+    padding: 0 10px 20px 10px;
 }
 
 /* Tablo stili */
 table {
     width: 100%;
-    min-width: 800px; /* Tablonun sığmayıp kaydırma çubuğunu tetiklemesi için minimum genişlik */
+    min-width: 800px;
     border-collapse: collapse;
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -52,7 +52,7 @@ th, td {
     padding: 12px 15px;
     text-align: center;
     border: 1px solid #ddd;
-    white-space: nowrap; /* Hücre içindeki metinlerin aşağı kaymasını engeller */
+    white-space: nowrap;
 }
 
 tbody tr:nth-child(even) {
@@ -64,7 +64,6 @@ tbody tr:hover {
 }
 
 /* --- BUTON STİLLERİ --- */
-
 #shareButton, #downloadPdfButton {
     border: none;
     padding: 10px 20px;
@@ -80,27 +79,35 @@ tbody tr:hover {
     background-color: #03dac6;
     color: #121212;
 }
-
 #shareButton:hover {
     background-color: #018786;
     color: white;
 }
-
 #downloadPdfButton {
     background-color: #c62828;
     color: white;
     margin-left: 10px;
 }
-
 #downloadPdfButton:hover {
     background-color: #b71c1c;
 }
 
 /* Geri bildirim mesajı stili */
 #shareFeedback {
-    display: block; /* Mesajın butonların altında kendi satırında yer almasını sağlar */
+    display: block;
     margin-top: 10px;
     color: #1a237e;
     font-weight: bold;
-    min-height: 20px; /* Mesaj olmadığında bile yer kaplamasını sağlar */
+    min-height: 20px;
+}
+
+/* YENİ: PDF OLUŞTURMA SIRASINDA KULLANILACAK GEÇİCİ STİL */
+.pdf-export-view .table-container {
+    overflow-x: visible; /* Kaydırmayı geçici olarak kaldır */
+}
+
+.pdf-export-view table {
+    min-width: auto; /* Tablonun minimum genişliğini kaldır, küçülebilmesini sağla */
+    transform: scale(0.9); /* Sığması için tabloyu biraz küçült */
+    transform-origin: top left; /* Küçültmeyi sol üst köşeden başlat */
 }

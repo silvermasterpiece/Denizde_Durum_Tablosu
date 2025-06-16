@@ -1,13 +1,19 @@
+// Sayfa tamamen yüklendiğinde tüm kodların çalışmasını sağlar
 document.addEventListener('DOMContentLoaded', () => {
 
+    // ====================================================================
+    // YARDIMCI FONKSİYON: Verileri yorumlayıp sade metne çevirir.
+    // ====================================================================
     function getDisplayContent(header, cellValue) {
+        // Eğer hücre boşsa veya resim yolu değilse, değeri olduğu gibi geri döndür.
         if (!cellValue || typeof cellValue !== 'string' || !cellValue.endsWith('.png')) {
             return cellValue;
         }
 
+        // Yön verilerini (K, KB, GB, D...) metin olarak döndür
         const directions = ["K", "KDK", "KD", "DKD", "D", "DGD", "GD", "GGD", "G", "GGB", "GB", "BGB", "B", "BKB", "KB", "KKB", "K"];
         if (header.includes('Yonu')) {
-            const match = cellValue.match(/(\d+)/);
+            const match = cellValue.match(/(\d+)/); // Dosya adından dereceyi al
             if (match) {
                 const angle = parseFloat(match[0]);
                 const index = Math.floor((angle + 11.25) / 22.5);
@@ -15,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Hava Durumu için sade metin döndür
         if (header.includes('Hava Durumu')) {
             if (cellValue.includes('acik-gunduz')) return 'Açık';
             if (cellValue.includes('acik-gece')) return 'Açık';
@@ -23,9 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (cellValue.includes('yagmurlu')) return 'Yağmurlu';
         }
 
-        return '';
+        return ''; // Eşleşme bulunamazsa boş döndür
     }
 
+    // ====================================================================
+    // ANA İŞLEM: veriler.json'dan verileri çekip HTML tablosunu oluşturur.
+    // ====================================================================
     fetch('veriler.json')
         .then(response => {
             if (!response.ok) { throw new Error('Network response was not ok'); }
@@ -61,10 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+    // ====================================================================
+    // BUTON İŞLEVLERİ
+    // ====================================================================
     const shareButton = document.getElementById('shareButton');
     const downloadPdfButton = document.getElementById('downloadPdfButton');
     const shareFeedback = document.getElementById('shareFeedback');
 
+    // 1. Paylaş Butonu
     if (shareButton) {
         shareButton.addEventListener('click', () => {
              navigator.clipboard.writeText(window.location.href)
@@ -77,16 +91,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         });
     }
+
+    // 2. PDF İndirme Butonu (Sığdırma Düzeltmesi ile)
     if (downloadPdfButton) {
         downloadPdfButton.addEventListener('click', () => {
             const element = document.getElementById('data-table');
+
+            // PDF sığdırma ayarları optimize edildi
             const opt = {
-              margin: 0.5,
-              filename: 'deniz-durum-tablosu.pdf',
-              image: { type: 'jpeg', quality: 0.98 },
-              html2canvas: { scale: 2 },
-              jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
+              margin:       0.2, // Kenar boşlukları azaltıldı
+              filename:     'deniz-durum-tablosu.pdf',
+              image:        { type: 'jpeg', quality: 0.98 },
+              html2canvas:  { scale: 1 }, // Ölçekleme standart hale getirildi
+              jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' } // format: 'letter' bazen daha iyi sonuç verir
             };
+
             html2pdf().from(element).set(opt).save();
         });
     }

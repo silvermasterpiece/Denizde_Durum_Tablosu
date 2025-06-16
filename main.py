@@ -23,6 +23,11 @@ def fetch_and_save_data():
     try:
         response = requests.get(URL, headers=HEADERS)
         response.raise_for_status()
+
+        # --- YENİ EKLENEN DÜZELTME ---
+        # Türkçe karakter sorununu çözmek için karakter kodlamasını UTF-8 olarak zorunlu kılıyoruz.
+        response.encoding = 'utf-8'
+
         html_content = response.text
         print("Sayfa içeriği başarıyla indirildi.")
     except requests.exceptions.RequestException as e:
@@ -39,8 +44,6 @@ def fetch_and_save_data():
         if not script.string:
             continue
 
-        # HEDEFE KİLİTLİ YÖNTEM: Sadece ana tabloyu dolduran veri bloğunu hedefle.
-        # Bu Regex, `var arr` tanımını ve onu hemen takip eden `mygrid.parse` komutunu bir bütün olarak arar.
         match = re.search(r'var arr = (\[\[.*?\]\]);\s*mygrid\.parse\(arr,"jsarray"\);', script.string, re.DOTALL)
 
         if match:

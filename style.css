@@ -1,11 +1,14 @@
+/* Ana gövde ayarları */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: #f0f2f5;
     color: #333;
     margin: 0;
-    padding: 20px;
+    padding: 10px; /* Kenar boşluklarını vücudun kendisine veriyoruz */
+    box-sizing: border-box; /* Padding'in toplam genişliğe dahil edilmesini sağlar */
 }
 
+/* Başlık bölümü */
 header {
     text-align: center;
     margin-bottom: 20px;
@@ -13,26 +16,26 @@ header {
 
 h1 {
     color: #1a237e;
+    font-size: 1.5em; /* Mobil için başlığı biraz küçültebiliriz */
 }
 
+/* Ana içerik alanı */
 main {
-    width: 100%; /* Main elementinin tam genişliği kullanmasını sağlar */
+    width: 100%;
 }
 
-/* YENİ: Tabloyu kaydırılabilir yapan kapsayıcı stili */
+/* Tabloyu kaydırılabilir yapan kapsayıcı stili (GÜNCELLENDİ) */
 .table-container {
-    width: 95%; /* Ekranın %95'ini kaplar */
-    margin: 0 auto; /* Kapsayıcıyı sayfada ortalar */
+    width: 100%; /* Artık kapsayıcı, body'nin padding'i içindeki tüm alanı kullanacak */
     overflow-x: auto; /* EN ÖNEMLİ KURAL: İçerik sığmazsa yatay kaydırma çubuğu gösterir */
-    -webkit-overflow-scrolling: touch; /* iOS cihazlarda daha akıcı bir kaydırma deneyimi sunar */
+    -webkit-overflow-scrolling: touch; /* iOS için akıcı kaydırma */
 }
 
-
+/* Tablo stili */
 table {
-    width: 100%; /* Tablonun, kapsayıcısının %100'ünü doldurmasını sağlar */
-    min-width: 800px; /* Tablonun okunabilirliğini korumak için minimum genişlik belirler */
+    width: 100%;
+    min-width: 800px; /* Tablonun okunabilirlik için minimum genişliği, bu sığmamasını sağlar */
     border-collapse: collapse;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #fff;
 }
 
@@ -45,6 +48,7 @@ th, td {
     padding: 12px 15px;
     text-align: center;
     border: 1px solid #ddd;
+    white-space: nowrap; /* Hücre içindeki metinlerin aşağı kaymasını engeller */
 }
 
 tbody tr:nth-child(even) {
@@ -55,13 +59,7 @@ tbody tr:hover {
     background-color: #e8eaf6;
 }
 
-td img {
-    height: 20px;
-    vertical-align: middle;
-}
-
-/* --- BUTON STİLLERİ --- */
-
+/* Buton Stilleri */
 #shareButton, #downloadPdfButton {
     border: none;
     padding: 10px 20px;
@@ -93,6 +91,7 @@ td img {
     background-color: #b71c1c;
 }
 
+/* Geri bildirim mesajı stili */
 #shareFeedback {
     display: inline-block;
     margin-left: 15px;

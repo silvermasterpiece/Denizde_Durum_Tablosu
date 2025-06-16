@@ -3,13 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deniz Durumu Tablosu!</title>
+    <title>Deniz Durumu Tablosu</title>
     <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
 </head>
 <body>
 
     <header>
         <h1>Deniz Durumu Tahmin Tablosu</h1>
+        <p>En güncel veriler aşağıda listelenmiştir.</p>
+
+        <button id="shareButton">Sayfa Linkini Kopyala 🔗</button>
+        <button id="downloadPdfButton">Tabloyu PDF Olarak İndir 📄</button>
+
+        <span id="shareFeedback"></span>
     </header>
 
     <main>

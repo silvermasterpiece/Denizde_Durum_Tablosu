@@ -51,3 +51,48 @@ td img {
     height: 20px;
     vertical-align: middle;
 }
+
+/* === YENİ EKLENEN BUTON STİLLERİ === */
+
+#shareButton {
+    background-color: #03dac6;
+    color: #121212;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 15px;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+#shareButton:hover {
+    background-color: #018786;
+    color: white;
+}
+
+#downloadPdfButton {
+    background-color: #c62828; /* PDF butonu için farklı bir renk */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 15px;
+    margin-top: 10px;
+    margin-left: 10px;
+    transition: background-color 0.3s;
+}
+
+#downloadPdfButton:hover {
+    background-color: #b71c1c;
+}
+
+#shareFeedback {
+    display: inline-block;
+    margin-left: 15px;
+    color: #1a237e;
+    font-weight: bold;
+}

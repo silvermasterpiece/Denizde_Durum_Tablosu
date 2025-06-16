@@ -5,15 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // YARDIMCI FONKSİYON: Verileri yorumlayıp sade metne çevirir.
     // ====================================================================
     function getDisplayContent(header, cellValue) {
-        // Eğer hücre boşsa veya resim yolu değilse, değeri olduğu gibi geri döndür.
         if (!cellValue || typeof cellValue !== 'string' || !cellValue.endsWith('.png')) {
             return cellValue;
         }
 
-        // Yön verilerini (K, KB, GB, D...) metin olarak döndür
         const directions = ["K", "KDK", "KD", "DKD", "D", "DGD", "GD", "GGD", "G", "GGB", "GB", "BGB", "B", "BKB", "KB", "KKB", "K"];
         if (header.includes('Yonu')) {
-            const match = cellValue.match(/(\d+)/); // Dosya adından dereceyi al
+            const match = cellValue.match(/(\d+)/);
             if (match) {
                 const angle = parseFloat(match[0]);
                 const index = Math.floor((angle + 11.25) / 22.5);
@@ -21,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Hava Durumu için sade metin döndür
         if (header.includes('Hava Durumu')) {
             if (cellValue.includes('acik-gunduz')) return 'Açık';
             if (cellValue.includes('acik-gece')) return 'Açık';
@@ -30,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (cellValue.includes('yagmurlu')) return 'Yağmurlu';
         }
 
-        return ''; // Eşleşme bulunamazsa boş döndür
+        return '';
     }
 
     // ====================================================================
@@ -92,20 +89,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. PDF İndirme Butonu (Sığdırma Düzeltmesi ile)
+    // 2. PDF İndirme Butonu (GELİŞMİŞ SIĞDIRMA DÜZELTMESİ)
     if (downloadPdfButton) {
         downloadPdfButton.addEventListener('click', () => {
             const element = document.getElementById('data-table');
 
-            // PDF sığdırma ayarları optimize edildi
+            // PDF sığdırma ayarları nihai olarak optimize edildi
             const opt = {
-              margin:       0.2, // Kenar boşlukları azaltıldı
+              margin:       [0.2, 0.1, 0.2, 0.1], // Kenar boşlukları (Üst, Sol, Alt, Sağ)
               filename:     'deniz-durum-tablosu.pdf',
-              image:        { type: 'jpeg', quality: 0.98 },
-              html2canvas:  { scale: 1 }, // Ölçekleme standart hale getirildi
-              jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' } // format: 'letter' bazen daha iyi sonuç verir
+              image:        { type: 'jpeg', quality: 0.95 },
+              html2canvas:  {
+                  scale: 2, // Yüksek çözünürlük için
+                  useCORS: true,
+                  // EN ÖNEMLİ AYARLAR: Tablonun tam genişliğini yakalamasını sağlar
+                  width: element.scrollWidth,
+                  windowWidth: element.scrollWidth
+              },
+              jsPDF:        {
+                  unit: 'in',
+                  format: 'a3', // Daha geniş bir kağıt formatı kullanır
+                  orientation: 'landscape' // Yatay mod
+              }
             };
 
+            // PDF oluşturma işlemi
             html2pdf().from(element).set(opt).save();
         });
     }

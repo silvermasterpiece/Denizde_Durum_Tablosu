@@ -1,0 +1,862 @@
+<html>
+        <body>
+        <link rel="stylesheet" type="text/css" href="js/dhtmlxlayout.css">
+        <link rel="stylesheet" type="text/css" href="css/dhtmlxlayout_dhx_black.css">
+        <script src="js/dhtmlxcommon.js"></script>
+        <script src="js/dhtmlxlayout.js"></script>
+        <script src="js/dhtmlxcontainer.js"></script>
+        <link rel="STYLESHEET" type="text/css" href="css/dhtmlxgrid.css">
+        <link rel="stylesheet" type="text/css" href="css/dhtmlxgrid_dhx_black.css">
+        <script  src="js/dhtmlxgrid.js"></script>
+        <script  src="js/dhtmlxgridcell.js"></script>
+        <script src="js/dhtmlxgrid_exportt.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/highcharts.js"></script>
+        <script type="text/javascript" src="js/exporting.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/dhtmlxtoolbar_dhx_black.css">
+        <script src="js/dhtmlxtoolbar.js"></script>
+
+
+        <div id="gridbox" style="position:absolute;top:0px;left:0px"></div>
+        <div id="metg" style="width: 100%; height: 100%">Grafik seciniz</div>
+        <script>
+                var DirTable = ["N","NNE","NE","ENE","E","ESE", "SE","SSE","S","SSW","SW","WSW", "W","WNW","NW","NNW","N"];
+                function comArr(unitsArray) {
+                        var outarr = [];
+                        for (var i = 0; i < [1750042800000,1750053600000,1750064400000,1750075200000,1750086000000,1750096800000,1750107600000,1750118400000,1750129200000,1750140000000,1750150800000,1750161600000,1750172400000,1750183200000,1750194000000,1750204800000,1750215600000,1750226400000,1750237200000,1750248000000,1750258800000,1750269600000,1750280400000,1750291200000,1750302000000,1750312800000,1750323600000,1750334400000,1750345200000,1750356000000,1750366800000,1750377600000,1750388400000,1750399200000,1750410000000,1750420800000,1750431600000,1750442400000,1750453200000,1750464000000].length; i++) {
+                                outarr[i] = [[1750042800000,1750053600000,1750064400000,1750075200000,1750086000000,1750096800000,1750107600000,1750118400000,1750129200000,1750140000000,1750150800000,1750161600000,1750172400000,1750183200000,1750194000000,1750204800000,1750215600000,1750226400000,1750237200000,1750248000000,1750258800000,1750269600000,1750280400000,1750291200000,1750302000000,1750312800000,1750323600000,1750334400000,1750345200000,1750356000000,1750366800000,1750377600000,1750388400000,1750399200000,1750410000000,1750420800000,1750431600000,1750442400000,1750453200000,1750464000000][i], unitsArray[i]];
+                        }
+                        return outarr;
+                }
+
+                var highchartsOptions = Highcharts.setOptions({
+                  lang: {
+                        loading: 'Yükleniyor...',
+                        months: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',  'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
+                        weekdays: ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'],
+                        shortMonths: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',  'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
+                        exportButtonTitle: "Dışarı Aktar",
+                        printButtonTitle: "Yazdır",
+                        rangeSelectorFrom: "Başlangış",
+                        rangeSelectorTo: "Bitiş",
+                        rangeSelectorZoom: "Periyot",
+                        downloadPNG: 'PNG Olarak indir',
+                        downloadJPEG: 'JPEG olarak indir',
+                        downloadPDF: 'PDF olarak indir',
+                        downloadSVG: 'SVG olarak indir',
+                        resetZoom: ['Yakınlaşmayı Sıfırla'],
+                        resetZoomTitle:['Yakınlaşmayı Sıfırla'],
+                        printChart:['Yazdır']
+                        // thousandsSep: ".",
+                        // decimalPoint: ','
+                        }
+                });
+//Dalga parametrelerinin Highcharts kullanılarak grafiğinin oluşturulması
+                function waveGram(arr) {
+                        var options = {
+                                chart: {
+                                        renderTo: 'metg',
+                                        zoomType: 'xy'
+                                },
+                                title: {
+                                        text: '5 Günlük Dalga Tahmini'
+                                },
+                                subtitle: {
+                                        text: '41.428N - 36.384E'                               },
+                                xAxis: [{
+                                        type: 'datetime',
+                                        startOnTick: true,
+                                        maxPadding: 0.006,
+                                        maxZoom: 2*5*60*1000,
+                                        gridLineWidth: 0.5
+                                },{ // Top X axis
+                                                linkedTo: 0,
+                                                type: 'datetime',
+                                                tickInterval: 24 * 3600 * 1000,
+                                                labels: {
+                                                        format: '{value:<span style="font-size: 10px; font-weight: bold">%a</span>  %e}',
+                                                        align: 'left',
+                                                        x: 3,
+                                                        y: -30,
+                                                        style: {
+                                                                fontSize: '9px',
+                                                                color: 'black'
+                                                        }
+                                                },
+                                                showLastLabel: false,
+                                                opposite: true,
+                                                tickLength: 40,
+                                                tickWidth: .25,
+                                                lineWidth: 0,
+                                                gridLineWidth: 0.5,
+                                                gridZIndex: 0,
+
+                                }],
+                                yAxis: [{
+                                        title: {
+                                                text: null
+                                        },
+                                        labels: {
+                                                enabled: true,
+                                                formatter: function(){
+                                                return '';
+                                                }
+                                        },
+                                        reversed: true,
+                                        max: 360,
+                                        min: 0,
+                                        tickInterval:90,
+                                        gridLineWidth: 0,
+                                        plotBands: [{
+                                                        from: 0,
+                                                        to: 22.5,
+                                                        color: 'rgba(68, 170, 213, 0.1)',
+                                                        label: {
+                                                                text: 'Kuzey',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                y: 0,
+                                                                x: 0
+
+                                                        }
+                                                        },{
+                                                        from: 22.5,
+                                                        to: 67.5,
+                                                        color: 'rgba(0, 0, 0, 0)',
+                                                        label: {
+                                                                text: 'Kuzey-Doğu',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                x: 0
+                                                        }
+                                                        },{
+                                                        from: 67.5,
+                                                        to: 112.5,
+                                                        color: 'rgba(68, 170, 213, 0.1)',
+                                                        label: {
+                                                                text: 'Doğu',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                x: 0
+                                                        }
+                                                        },{
+                                                        from: 112.5,
+                                                        to: 157.5,
+                                                        color: 'rgba(0, 0, 0, 0)',
+                                                        label: {
+                                                                text: 'Güney-Doğu',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                x: 0
+                                                        }
+                                                        },{
+                                                        from: 157.5,
+                                                        to: 202.5,
+                                                        color: 'rgba(68, 170, 213, 0.1)',
+                                                        label: {
+                                                                text: 'Güney',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                x: 0
+                                                        }
+                                                        },{
+                                                        from: 202.5,
+                                                        to: 247.5,
+                                                        color: 'rgba(0, 0, 0, 0)',
+                                                        label: {
+                                                                text: 'Güney-Batı',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                x: 0
+                                                        }
+                                                        },{
+                                                        from: 247.5,
+                                                        to: 292.5,
+                                                        color: 'rgba(68, 170, 213, 0.1)',
+                                                        label: {
+                                                                text: 'Batı',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                x: 0
+                                                        }
+                                                        },{
+                                                        from: 292.5,
+                                                        to: 337.5,
+                                                        color: 'rgba(0, 0, 0, 0)',
+                                                        label: {
+                                                                text: 'Kuzey-Batı',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                x: 0
+                                                        }
+                                                        },{
+                                                        from: 337.5,
+                                                        to: 360,
+                                                        color: 'rgba(68, 170, 213, 0.1)',
+                                                        label: {
+                                                                text: 'Kuzey',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+
+                                                                },
+                                                                y: 10,
+                                                                x: 0
+                                                        }
+                                                        }
+
+                                        ]
+                                },{
+                                        title: {
+                                                text: 'Dalga Yüksekliği',
+                                                style: {
+                                                        color: '#4572A7'
+                                                }
+                                        },
+                                        labels: {
+                                                style: {
+                                                        color: '#4572A7'
+                                                },
+                                                formatter: function() {
+                                                        return Highcharts.numberFormat(this.value, 1)+' m';
+                                                }
+                                        },
+                                        gridLineWidth: 0,
+                                        max: 1.60,
+                                        tickInterval:0.40,
+                                        min:0,
+                                        opposite: true
+                                },{
+                                        title: {
+                                                text: 'Dalga Peryodu',
+                                                style: {
+                                                        color: '#89A54E'
+                                                }
+                                        },
+                                        gridLineWidth: 0,
+                                        max:5.20,
+                                        tickInterval:1.30,
+                                        min:0,
+                                        labels: {
+                                                style: {
+                                                        color: '#89A54E'
+                                                },
+                                                formatter: function() {
+                                                        return Highcharts.numberFormat(this.value, 1)+' sn';
+                                                }
+                                        },
+                                        opposite: true
+                                }],
+                                plotOptions: {
+                                        scatter: {
+                                                point: {
+                                                        events: {
+                                                        click: function() {
+                                                                alert(this.x);
+                                                                }
+                                                        }
+                                                },
+                                                marker: {
+                                                        radius: 5,
+                                                        states: {
+                                                        hover: {
+                                                                enabled: true,
+                                                                lineColor: 'rgb(100,100,100)'
+                                                        }
+                                                        }
+                                                },
+                                                states: {
+                                                        hover: {
+                                                        marker: {
+                                                                enabled: false
+                                                        }
+                                                        }
+                                                }
+                                        }
+                                },
+                                tooltip: {
+                                        formatter: function() {
+                                                var s = '<span style="font-size: 10px">Tarih-Saat :'+ Highcharts.dateFormat('%A, %b-%e-%Y, %H:%M ', this.x) +'</span>';
+
+                                                $.each(this.points, function(i, point) {
+                                                if(i==1) {
+                                                        s += '<br/><span style="color:' + point.series.color + '">'+ point.series.name +': </span><b>'+ parseFloat(point.y).toFixed(2) +" metre"+'</b>';
+                                                } else if(i==0){
+                                                        s += '<br/><span style="color:' + point.series.color + '">'+ point.series.name +': </span><b>'+ DirTable[Math.floor((parseFloat(point.y)+11.25)/22.5)]+'</b>';
+                                                } else {
+                                                        s += '<br/><span style="color:' + point.series.color + '">'+ point.series.name +': </span><b>'+ Math.round(point.y) +" sn"+'</b>';
+                                                }
+                                                });
+
+                                                return s;
+                                        },
+                                        crosshairs: [true, true, true],
+                                        shared: true
+                                },
+                                exporting: {
+                                        enabled: false
+                                },
+                                series: [{
+                                                name: 'Dalga Yönü',
+                                                color: 'rgba(223, 83, 83, .5)',
+                                                type: 'scatter',
+                                                data: comArr([284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574,333.049,332.675,331.113,329.01,325.904,323.135,321.938,322.05,342.331,75.9741,82.2896,81.9784,71.5109,323.967]),
+                                                zIndex :3
+                                        },{
+                                                name: 'Dalga Yüksekliği',
+                                                color: '#4572A7',
+                                                type: 'area',
+                                                yAxis: 1,
+                                                marker: {
+                                                        enabled: false
+                                                },
+                                                data: comArr([0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438,0.471303,0.43864,0.344466,0.250804,0.17872,0.133709,0.102379,0.0778009,0.0627252,0.112908,0.200091,0.148086,0.0968988,0.0598584]),
+                                                zIndex :1
+                                        },{
+                                                name: 'Dalga Peryodu',
+                                                color: '#89A54E',
+                                                type: 'spline',
+                                                yAxis: 2,
+                                                marker: {
+                                                        enabled: false
+                                                },
+                                                data: comArr([2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688,4.12811,3.9649,4.09512,4.224,4.28109,4.2549,4.24998,4.13179,3.36074,2.24703,2.06041,2.08934,2.34285,3.38549]),
+                                                zIndex :2
+                                        }]
+                        }
+
+                        chart = new Highcharts.Chart(options);
+                }
+//Rüzgar parametrelerinin Highcharts kullanılarak grafiğinin oluşturulması
+                function windGram() {
+                        chart = new Highcharts.Chart({
+                                chart: {
+                                        renderTo: 'metg',
+                                        type: 'scatter',
+                                        zoomType: 'xy'
+                                },
+                                title: {
+                                        text: '5 Günlük Rüzgar Tahmini'
+                                },
+                                subtitle: {
+                                        text: '41.428N - 36.384E'                               },
+                                xAxis: [{
+                                                type: 'datetime',
+                                                startOnTick: true,
+                                                maxPadding: 0.006,
+                                                maxZoom: 2*5*60*1000,
+                                                gridLineWidth: 0.5
+                                }, { // Top X axis
+                                                linkedTo: 0,
+                                                type: 'datetime',
+                                                tickInterval: 24 * 3600 * 1000,
+                                                labels: {
+                                                        format: '{value:<span style="font-size: 10px; font-weight: bold">%a</span>  %e}',
+                                                        align: 'left',
+                                                        x: 3,
+                                                        y: -30,
+                                                        style: {
+                                                                fontSize: '9px',
+                                                                color: 'black'
+                                                        }
+                                                },
+                                                showLastLabel: false,
+                                                opposite: true,
+                                                tickLength: 40,
+                                                tickWidth: .25,
+                                                lineWidth: 0,
+                                                gridLineWidth: .5,
+                                                gridZIndex: 0,
+
+                                }],
+
+                                yAxis: [{
+                                        title: {
+                                                text: null
+                                        },
+                                        labels: {
+                                                enabled: true,
+                                                formatter: function(){
+                                                return '';
+                                                }
+                                        },
+                                        reversed: true,
+                                        max: 360,
+                                        min: 0,
+                                        tickInterval:90,
+                                        gridLineWidth: 0,
+                                        plotBands: [{
+                                                        from: 0,
+                                                        to: 22.5,
+                                                        color: 'rgba(68, 170, 213, 0.1)',
+                                                        label: {
+                                                                text: 'Kuzey',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                y: 0,
+                                                                x: 0
+
+                                                        }
+                                                        },{
+                                                        from: 22.5,
+                                                        to: 67.5,
+                                                        color: 'rgba(0, 0, 0, 0)',
+                                                        label: {
+                                                                text: 'Kuzey-Doğu',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                x: 0
+                                                        }
+                                                        },{
+                                                        from: 67.5,
+                                                        to: 112.5,
+                                                        color: 'rgba(68, 170, 213, 0.1)',
+                                                        label: {
+                                                                text: 'Doğu',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                x: 0
+                                                        }
+                                                        },{
+                                                        from: 112.5,
+                                                        to: 157.5,
+                                                        color: 'rgba(0, 0, 0, 0)',
+                                                        label: {
+                                                                text: 'Güney-Doğu',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                x: 0
+                                                        }
+                                                        },{
+                                                        from: 157.5,
+                                                        to: 202.5,
+                                                        color: 'rgba(68, 170, 213, 0.1)',
+                                                        label: {
+                                                                text: 'Güney',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                x: 0
+                                                        }
+                                                        },{
+                                                        from: 202.5,
+                                                        to: 247.5,
+                                                        color: 'rgba(0, 0, 0, 0)',
+                                                        label: {
+                                                                text: 'Güney-Batı',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                x: 0
+                                                        }
+                                                        },{
+                                                        from: 247.5,
+                                                        to: 292.5,
+                                                        color: 'rgba(68, 170, 213, 0.1)',
+                                                        label: {
+                                                                text: 'Batı',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                x: 0
+                                                        }
+                                                        },{
+                                                        from: 292.5,
+                                                        to: 337.5,
+                                                        color: 'rgba(0, 0, 0, 0)',
+                                                        label: {
+                                                                text: 'Kuzey-Batı',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+                                                                },
+                                                                x: 0
+                                                        }
+                                                        },{
+                                                        from: 337.5,
+                                                        to: 360,
+                                                        color: 'rgba(68, 170, 213, 0.1)',
+                                                        label: {
+                                                                text: 'Kuzey',
+                                                                style: {
+                                                                        color: 'rgb(200,200, 200)',
+                                                                        font: '9px normal Verdana, sans-serif'
+
+                                                                },
+                                                                y: 10,
+                                                                x: 0
+                                                        }
+                                                        }
+
+                                        ]
+                                },{
+                                        title: {
+                                                text: 'Rüzgar Hızı',
+                                                style: {
+                                                        color: '#4572A7'
+                                                }
+                                        },
+                                        gridLineWidth: 0,
+                                        max: 24.00,
+                                        tickInterval:6.00,
+                                        min:0,
+                                        labels: {
+                                                formatter: function() {
+                                                        return this.value +' knot';
+                                                },
+                                                style: {
+                                                        color: '#4572A7'
+                                                }
+                                        },
+                                        opposite: true
+                                }],
+
+                                tooltip: {
+                                        formatter: function() {
+                                                var s = '<span style="font-size: 10px">Tarih-Saat :'+ Highcharts.dateFormat('%A, %b-%e-%Y, %H:%M ', this.x) +'</span>';
+                                                $.each(this.points, function(i, point) {
+                                                if(i==1) {
+                                                        s += '<br/><span style="color:' + point.series.color + '">'+ point.series.name +': </span><b>'+ Math.round(point.y) +" knot"+'</b>';
+                                                } else {
+                                                        s += '<br/><span style="color:' + point.series.color + '">'+ point.series.name +': </span><b>'+ DirTable[Math.floor((parseFloat(point.y)+11.25)/22.5)]+'</b>';
+                                                }
+
+
+                                                });
+
+                                                return s;
+                                        },
+                                        crosshairs: [true, true],
+                                        shared: true
+                                },
+                                plotOptions: {
+                                        scatter: {
+                                                point: {
+                                                        events: {
+                                                        click: function() {
+                                                                alert(this.x);
+                                                                }
+                                                        }
+                                                },
+                                                marker: {
+                                                        radius: 5,
+                                                        states: {
+                                                        hover: {
+                                                                enabled: true,
+                                                                lineColor: 'rgb(100,100,100)'
+                                                        }
+                                                        }
+                                                },
+                                                states: {
+                                                        hover: {
+                                                        marker: {
+                                                                enabled: false
+                                                        }
+                                                        }
+                                                }
+                                        }
+                                },
+                                exporting: {
+                                        enabled: false
+                                },
+                                series: [{
+                                        name: 'Rüzgar Yönü',
+                                        color: 'rgba(223, 83, 83, .5)',
+                                        data: comArr([221.577,299.905,317.62,331.655,334.176,319.057,62.4352,184.005,246.243,317.472,359.74,353.943,342.938,315.715,241.818,230.002,231.467,135.584,67.0323,37.4502,46.1436,202.172,280.477,288.443,280.87,319.71,13.002,22.9762,83.0388,114.466,143.832,150.585,152.057,102.45,75.6133,79.3845,71.4099,61.9278,292.288,303.914])
+                                },{
+                                        name: 'Rüzgar Hızı',
+                                        color: '#4572A7',
+                                        type: 'spline',
+                                        yAxis: 1,
+                                        marker: {
+                                                enabled: false
+                                        },
+                                        data: comArr([7.75015,5.93994,17.9227,18.6448,14.7803,8.75802,1.35083,5.30031,6.28368,14.5356,12.9821,9.86413,7.06128,2.92753,3.65603,5.5755,5.65852,2.13998,5.46758,4.44326,0.459421,2.02667,6.68658,10.3093,8.44318,4.98639,7.71625,8.19978,3.69146,5.78547,6.80798,5.56269,6.13184,8.22079,11.5551,12.495,9.57586,3.16177,1.56636,12.1389])
+                                }]
+                        });
+                }
+                function meteoGram() {
+                        chart = new Highcharts.Chart({
+                                chart: {
+                                        renderTo: 'metg',
+                                        zoomType: 'xy'
+                                },
+                                title: {
+                                        text: '5 Günlük Hava Tahmini'
+                                },
+                                subtitle: {
+                                        text: '41.428N - 36.384E'                               },
+                                xAxis: [{
+                                                type: 'datetime',
+                                                startOnTick: true,
+                                                maxPadding: 0.006,
+                                                maxZoom: 2*5*60*1000,
+                                                gridLineWidth: 0.5
+                                }, { // Top X axis
+                                                linkedTo: 0,
+                                                type: 'datetime',
+                                                tickInterval: 24 * 3600 * 1000,
+                                                labels: {
+                                                        format: '{value:<span style="font-size: 10px; font-weight: bold">%a</span>  %e}',
+                                                        align: 'left',
+                                                        x: 3,
+                                                        y: -30,
+                                                        style: {
+                                                                fontSize: '9px',
+                                                                color: 'black'
+                                                        }
+                                                },
+                                                showLastLabel: false,
+                                                opposite: true,
+                                                tickLength: 40,
+                                                tickWidth: .25,
+                                                lineWidth: 0,
+                                                gridLineWidth: .5,
+                                                gridZIndex: 0,
+
+                                }],
+
+                                yAxis: [{ // Primary yAxis
+                                        labels: {
+                                        formatter: function() {
+                                                return this.value +'°C';
+                                        },
+                                        style: {
+                                                color: '#89A54E'
+                                        }
+                                        },
+                                        max: 24.00,
+                                        min: 17.00,
+                                        title: {
+                                        text: 'Sıcaklık',
+                                        style: {
+                                                color: '#89A54E'
+                                        }
+                                        },
+                                        opposite: true
+
+                                }, { // Secondary yAxis
+                                        gridLineWidth: 0,
+                                        title: {
+                                        text: 'Yağış',
+                                        style: {
+                                                color: '#4572A7'
+                                        }
+                                        },
+                                        max: 3.00,
+                                        labels: {
+                                        formatter: function() {
+                                                return this.value +' mm';
+                                        },
+                                        style: {
+                                                color: '#4572A7'
+                                        }
+                                        }
+
+                                }, { // Tertiary yAxis
+                                        gridLineWidth: 0,
+                                        title: {
+                                        text: 'Denize İndirgenmiş Basınç',
+                                        style: {
+                                                color: '#AA4643'
+                                        }
+                                        },
+                                        max: 1020.00,
+                                        labels: {
+                                        formatter: function() {
+                                                return this.value +' mb';
+                                        },
+                                        style: {
+                                                color: '#AA4643'
+                                        }
+                                        },
+                                        opposite: true
+                                }],
+                                tooltip: {
+                                        formatter: function() {
+                                                var s = '<span style="font-size: 10px">Tarih-Saat :'+ Highcharts.dateFormat('%A, %b-%e-%Y, %H:%M ', this.x) +'</span>';
+
+                                                $.each(this.points, function(i, point) {
+                                                if(i==0) {
+                                                        s += '<br/><span style="color:' + point.series.color + '">'+ point.series.name +': </span><b>'+ parseFloat(point.y).toFixed(2) +" mm"+'</b>';
+                                                } else if(i==1){
+                                                        s += '<br/><span style="color:' + point.series.color + '">'+ point.series.name +': </span><b>'+ Math.round(point.y) +" mb"+'</b>';
+                                                } else {
+                                                        s += '<br/><span style="color:' + point.series.color + '">'+ point.series.name +': </span><b>'+ parseFloat(point.y).toFixed(1) +" C"+'</b>';
+                                                }
+                                                });
+
+                                                return s;
+                                        },
+                                        crosshairs: [true, true, true],
+                                        shared: true
+                                },
+                                plotOptions: {
+
+                                        column: {
+                                                pointPadding: 0,
+                                                groupPadding: 0,
+                                                borderWidth: 0,
+                                                shadow: false,
+                                                borderRadius: 0
+                                        }
+                                },
+                                exporting: {
+                                        enabled: false
+                                },
+                                series: [{
+                                        name: 'Yağış',
+                                        color: '#4572A7',
+                                        type: 'column',
+                                        yAxis: 1,
+                                        data: comArr([0,0,0.152588,0.375748,0,0.173569,1.81961,0.528336,0,0,0.101089,0,0,0.728607,1.24931,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+
+                                }, {
+                                        name: 'Denize İndirgenmiş Basınç',
+                                        type: 'spline',
+                                        color: '#AA4643',
+                                        yAxis: 2,
+                                        marker: {
+                                                enabled: false
+                                        },
+                                        dashStyle: 'shortdot',
+                                        data: comArr([1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63,1018.77,1017.62,1016.73,1016.56,1015.64,1014.08,1013.17,1012.55,1011.44,1010.52,1010.88,1012.42,1012.95,1013.36])
+
+                                }, {
+                                        name: 'Sıcaklık',
+                                        color: '#89A54E',
+                                        type: 'spline',
+                                        marker: {
+                                                enabled: false
+                                        },
+                                        data: comArr([18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304,20.5604,21.3214,21.5783,21.7863,21.3012,20.3991,20.0265,20.3131,21.1005,21.8026,21.8695,21.7829,21.7863,21.2599])
+                                }]
+                        });
+                }
+                var wavebool = false;
+
+//Sorgu sonucunda dönen değerlerin DHTMLXGrid kullanılarak liste olarak görüntülenmesi
+                document.getElementById("gridbox").style.width  = window.innerWidth;
+                document.getElementById("gridbox").style.height = $(document).height();
+                dhxLayout = new dhtmlXLayoutObject("gridbox", "2U");
+                dhxLayout.cells("a").hideHeader();
+                dhxLayout.cells("b").setText("Grafik Gosterimi");
+                dhxLayout.cells("b").hideHeader();
+                mygrid = dhxLayout.cells("a").attachGrid();
+                mygrid.setImagePath("imgs/");
+                mygrid.setHeader("Tarih/Saat, Ruzgar Yonu, Hizi (knot), Hizi (bofor), Dalga Yonu, Yuksekligi (m), Peryod (sn),Hava Durumu,Sicaklik (C),Basinc (mb)",null,
+                                ["text-align:center;","text-align:center;","text-align:center","text-align:center;","text-align:center;","text-align:center","text-align:center;","text-align:center","text-align:center","text-align:center"]);
+                mygrid.setInitWidthsP("20,8,8,8,8,10,8,10,10,10");
+                mygrid.setColAlign("center,center,center,center,center,center,center,center,center,center");
+                mygrid.setColTypes("ro,img,ro,ro,img,ro,ro,img,ro,ro");
+                mygrid.setColSorting("str,int,int,int,int,int,int,int,int,int");
+                mygrid.setSkin("sbdark");
+                mygrid.init();
+                var arr = [["Pzt 16-Haz 03:00","img\/222c.png","8",3,"img\/285e.png","0.0","3","img\/acik-gece.png","19.0","1014"],["Pzt 16-Haz 06:00","img\/300c.png","6",2,"img\/350e.png","0.1","4","img\/acik-gunduz.png","21.5","1014"],["Pzt 16-Haz 09:00","img\/318c.png","18",5,"img\/334e.png","0.8","4","img\/yagmurlu.png","21.0","1014"],["Pzt 16-Haz 12:00","img\/332c.png","19",5,"img\/332e.png","1.2","4","img\/yagmurlu.png","21.6","1014"],["Pzt 16-Haz 15:00","img\/334c.png","15",4,"img\/334e.png","1.2","4","img\/acik-gunduz.png","21.7","1014"],["Pzt 16-Haz 18:00","img\/319c.png","9",3,"img\/335e.png","1.0","5","img\/yagmurlu.png","21.0","1015"],["Pzt 16-Haz 21:00","img\/62c.png","1",1,"img\/335e.png","0.8","5","img\/yagmurlu.png","18.2","1015"],["Sal 17-Haz 00:00","img\/184c.png","5",2,"img\/333e.png","0.7","5","img\/yagmurlu.png","19.0","1014"],["Sal 17-Haz 03:00","img\/246c.png","6",2,"img\/335e.png","0.7","5","img\/acikazbulutlu.png","19.8","1014"],["Sal 17-Haz 06:00","img\/317c.png","15",4,"img\/333e.png","0.7","4","img\/acik-gunduz.png","20.7","1015"],["Sal 17-Haz 09:00","img\/360c.png","13",4,"img\/334e.png","0.8","4","img\/yagmurlu.png","19.4","1016"],["Sal 17-Haz 12:00","img\/354c.png","10",3,"img\/335e.png","0.8","4","img\/acik-gunduz.png","20.3","1016"],["Sal 17-Haz 15:00","img\/343c.png","7",3,"img\/334e.png","0.6","4","img\/acik-gunduz.png","21.0","1016"],["Sal 17-Haz 18:00","img\/316c.png","3",1,"img\/332e.png","0.5","4","img\/yagmurlu.png","20.9","1017"],["Sal 17-Haz 21:00","img\/242c.png","4",1,"img\/329e.png","0.3","4","img\/yagmurlu.png","20.4","1017"],["\u00c7r\u015f 18-Haz 00:00","img\/230c.png","6",2,"img\/325e.png","0.3","4","img\/acik-gece.png","20.4","1016"],["\u00c7r\u015f 18-Haz 03:00","img\/231c.png","6",2,"img\/323e.png","0.2","4","img\/acik-gece.png","20.1","1017"],["\u00c7r\u015f 18-Haz 06:00","img\/136c.png","2",1,"img\/322e.png","0.2","4","img\/acik-gunduz.png","21.7","1017"],["\u00c7r\u015f 18-Haz 09:00","img\/67c.png","5",2,"img\/320e.png","0.1","4","img\/acik-gunduz.png","21.1","1018"],["\u00c7r\u015f 18-Haz 12:00","img\/37c.png","4",2,"img\/320e.png","0.1","4","img\/acik-gunduz.png","21.6","1017"],["\u00c7r\u015f 18-Haz 15:00","img\/46c.png","0",0,"img\/319e.png","0.1","4","img\/acik-gunduz.png","21.8","1017"],["\u00c7r\u015f 18-Haz 18:00","img\/202c.png","2",1,"img\/318e.png","0.1","4","img\/acik-gece.png","22.6","1018"],["\u00c7r\u015f 18-Haz 21:00","img\/280c.png","7",2,"img\/318e.png","0.1","4","img\/acik-gece.png","22.1","1018"],["Pr\u015f 19-Haz 00:00","img\/288c.png","10",3,"img\/323e.png","0.1","3","img\/acik-gece.png","21.4","1017"],["Pr\u015f 19-Haz 03:00","img\/281c.png","8",3,"img\/328e.png","0.3","3","img\/acik-gece.png","20.8","1018"],["Pr\u015f 19-Haz 06:00","img\/320c.png","5",2,"img\/333e.png","0.4","4","img\/acik-gunduz.png","21.5","1019"],["Pr\u015f 19-Haz 09:00","img\/13c.png","8",3,"img\/333e.png","0.5","4","img\/acik-gunduz.png","20.6","1019"],["Pr\u015f 19-Haz 12:00","img\/23c.png","8",3,"img\/333e.png","0.4","4","img\/acik-gunduz.png","21.3","1018"],["Pr\u015f 19-Haz 15:00","img\/83c.png","4",1,"img\/331e.png","0.3","4","img\/acik-gunduz.png","21.6","1017"],["Pr\u015f 19-Haz 18:00","img\/114c.png","6",2,"img\/329e.png","0.3","4","img\/acik-gece.png","21.8","1017"],["Pr\u015f 19-Haz 21:00","img\/144c.png","7",2,"img\/326e.png","0.2","4","img\/acik-gece.png","21.3","1016"],["Cum 20-Haz 00:00","img\/151c.png","6",2,"img\/323e.png","0.1","4","img\/acik-gece.png","20.4","1014"],["Cum 20-Haz 03:00","img\/152c.png","6",2,"img\/322e.png","0.1","4","img\/acik-gece.png","20.0","1013"],["Cum 20-Haz 06:00","img\/102c.png","8",3,"img\/322e.png","0.1","4","img\/acik-gunduz.png","20.3","1013"],["Cum 20-Haz 09:00","img\/76c.png","12",4,"img\/342e.png","0.1","3","img\/acik-gunduz.png","21.1","1011"],["Cum 20-Haz 12:00","img\/79c.png","12",4,"img\/76e.png","0.1","2","img\/acik-gunduz.png","21.8","1011"],["Cum 20-Haz 15:00","img\/71c.png","10",3,"img\/82e.png","0.2","2","img\/acik-gunduz.png","21.9","1011"],["Cum 20-Haz 18:00","img\/62c.png","3",1,"img\/82e.png","0.1","2","img\/acik-gece.png","21.8","1012"],["Cum 20-Haz 21:00","img\/292c.png","2",1,"img\/72e.png","0.1","2","img\/acik-gece.png","21.8","1013"],["Cts 21-Haz 00:00","img\/304c.png","12",4,"img\/324e.png","0.1","3","img\/acik-gece.png","21.3","1013"]];
+                mygrid.parse(arr,"jsarray");
+
+                toolbar = dhxLayout.cells("b").attachToolbar();
+                toolbar.setIconsPath("img/");
+                toolbar.loadXML("xml/dhxtoolbar_button.xml?" + new Date().getTime(),function() {
+                        toolbar.addSpacer("metgr");
+                });
+                toolbar.attachEvent("onStateChange", function(id,state) {
+                        if(state == false) toolbar.setItemState(id,true);
+                        if(id == "wind"){
+                                wavebool = false;
+                                toolbar.setItemState("wave", false);
+                                toolbar.setItemState("metgr", false);
+                                windGram()
+                        }
+                        if(id == "wave"){
+                                wavebool = true;
+                                toolbar.setItemState("wind", false);
+                                toolbar.setItemState("metgr", false);
+                                waveGram([[284.512],[0.00590675],[2.88786],[284.512,350.015],[0.00590675,0.0679697],[2.88786,4.1151],[284.512,350.015,333.905],[0.00590675,0.0679697,0.821226],[2.88786,4.1151,3.72792],[284.512,350.015,333.905,331.924],[0.00590675,0.0679697,0.821226,1.23146],[2.88786,4.1151,3.72792,4.1799],[284.512,350.015,333.905,331.924,334.202],[0.00590675,0.0679697,0.821226,1.23146,1.21946],[2.88786,4.1151,3.72792,4.1799,4.37805],[284.512,350.015,333.905,331.924,334.202,335.326],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851],[284.512,350.015,333.905,331.924,334.202,335.326,334.683],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574,333.049],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438,0.471303],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688,4.12811],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574,333.049,332.675],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438,0.471303,0.43864],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688,4.12811,3.9649],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574,333.049,332.675,331.113],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438,0.471303,0.43864,0.344466],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688,4.12811,3.9649,4.09512],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574,333.049,332.675,331.113,329.01],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438,0.471303,0.43864,0.344466,0.250804],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688,4.12811,3.9649,4.09512,4.224],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574,333.049,332.675,331.113,329.01,325.904],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438,0.471303,0.43864,0.344466,0.250804,0.17872],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688,4.12811,3.9649,4.09512,4.224,4.28109],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574,333.049,332.675,331.113,329.01,325.904,323.135],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438,0.471303,0.43864,0.344466,0.250804,0.17872,0.133709],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688,4.12811,3.9649,4.09512,4.224,4.28109,4.2549],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574,333.049,332.675,331.113,329.01,325.904,323.135,321.938],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438,0.471303,0.43864,0.344466,0.250804,0.17872,0.133709,0.102379],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688,4.12811,3.9649,4.09512,4.224,4.28109,4.2549,4.24998],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574,333.049,332.675,331.113,329.01,325.904,323.135,321.938,322.05],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438,0.471303,0.43864,0.344466,0.250804,0.17872,0.133709,0.102379,0.0778009],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688,4.12811,3.9649,4.09512,4.224,4.28109,4.2549,4.24998,4.13179],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574,333.049,332.675,331.113,329.01,325.904,323.135,321.938,322.05,342.331],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438,0.471303,0.43864,0.344466,0.250804,0.17872,0.133709,0.102379,0.0778009,0.0627252],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688,4.12811,3.9649,4.09512,4.224,4.28109,4.2549,4.24998,4.13179,3.36074],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574,333.049,332.675,331.113,329.01,325.904,323.135,321.938,322.05,342.331,75.9741],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438,0.471303,0.43864,0.344466,0.250804,0.17872,0.133709,0.102379,0.0778009,0.0627252,0.112908],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688,4.12811,3.9649,4.09512,4.224,4.28109,4.2549,4.24998,4.13179,3.36074,2.24703],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574,333.049,332.675,331.113,329.01,325.904,323.135,321.938,322.05,342.331,75.9741,82.2896],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438,0.471303,0.43864,0.344466,0.250804,0.17872,0.133709,0.102379,0.0778009,0.0627252,0.112908,0.200091],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688,4.12811,3.9649,4.09512,4.224,4.28109,4.2549,4.24998,4.13179,3.36074,2.24703,2.06041],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574,333.049,332.675,331.113,329.01,325.904,323.135,321.938,322.05,342.331,75.9741,82.2896,81.9784],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438,0.471303,0.43864,0.344466,0.250804,0.17872,0.133709,0.102379,0.0778009,0.0627252,0.112908,0.200091,0.148086],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688,4.12811,3.9649,4.09512,4.224,4.28109,4.2549,4.24998,4.13179,3.36074,2.24703,2.06041,2.08934],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574,333.049,332.675,331.113,329.01,325.904,323.135,321.938,322.05,342.331,75.9741,82.2896,81.9784,71.5109],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438,0.471303,0.43864,0.344466,0.250804,0.17872,0.133709,0.102379,0.0778009,0.0627252,0.112908,0.200091,0.148086,0.0968988],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688,4.12811,3.9649,4.09512,4.224,4.28109,4.2549,4.24998,4.13179,3.36074,2.24703,2.06041,2.08934,2.34285],[284.512,350.015,333.905,331.924,334.202,335.326,334.683,332.826,335.077,332.932,334.053,334.656,333.615,332.205,329.407,324.909,322.993,321.834,320.416,320.492,319.235,318.18,318.096,322.623,328.18,332.574,333.049,332.675,331.113,329.01,325.904,323.135,321.938,322.05,342.331,75.9741,82.2896,81.9784,71.5109,323.967],[0.00590675,0.0679697,0.821226,1.23146,1.21946,0.971017,0.818795,0.731446,0.668044,0.727038,0.814702,0.77125,0.617927,0.460674,0.346159,0.26248,0.216863,0.167748,0.126398,0.100358,0.0848725,0.0649452,0.0661153,0.124463,0.30996,0.388438,0.471303,0.43864,0.344466,0.250804,0.17872,0.133709,0.102379,0.0778009,0.0627252,0.112908,0.200091,0.148086,0.0968988,0.0598584],[2.88786,4.1151,3.72792,4.1799,4.37805,4.55851,4.76762,4.85926,4.74882,4.13577,3.92515,3.99239,3.90904,3.96407,4.01873,4.27908,4.13136,4.03971,3.95394,3.844,3.71891,3.82754,3.86066,3.48198,3.46066,4.01688,4.12811,3.9649,4.09512,4.224,4.28109,4.2549,4.24998,4.13179,3.36074,2.24703,2.06041,2.08934,2.34285,3.38549]])
+                        }
+                        if(id == "metgr"){
+                                wavebool = true;
+                                toolbar.setItemState("wave", false);
+                                toolbar.setItemState("wind", false);
+                                meteoGram([[18.9923],[1013.65],[18.9923,21.5033],[1013.65,1013.6],[18.9923,21.5033,21.0487],[1013.65,1013.6,1014.08],[18.9923,21.5033,21.0487,21.578],[1013.65,1013.6,1014.08,1013.65],[18.9923,21.5033,21.0487,21.578,21.671],[1013.65,1013.6,1014.08,1013.65,1013.73],[18.9923,21.5033,21.0487,21.578,21.671,21.0241],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304,20.5604],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63,1018.77],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304,20.5604,21.3214],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63,1018.77,1017.62],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304,20.5604,21.3214,21.5783],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63,1018.77,1017.62,1016.73],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304,20.5604,21.3214,21.5783,21.7863],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63,1018.77,1017.62,1016.73,1016.56],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304,20.5604,21.3214,21.5783,21.7863,21.3012],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63,1018.77,1017.62,1016.73,1016.56,1015.64],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304,20.5604,21.3214,21.5783,21.7863,21.3012,20.3991],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63,1018.77,1017.62,1016.73,1016.56,1015.64,1014.08],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304,20.5604,21.3214,21.5783,21.7863,21.3012,20.3991,20.0265],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63,1018.77,1017.62,1016.73,1016.56,1015.64,1014.08,1013.17],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304,20.5604,21.3214,21.5783,21.7863,21.3012,20.3991,20.0265,20.3131],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63,1018.77,1017.62,1016.73,1016.56,1015.64,1014.08,1013.17,1012.55],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304,20.5604,21.3214,21.5783,21.7863,21.3012,20.3991,20.0265,20.3131,21.1005],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63,1018.77,1017.62,1016.73,1016.56,1015.64,1014.08,1013.17,1012.55,1011.44],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304,20.5604,21.3214,21.5783,21.7863,21.3012,20.3991,20.0265,20.3131,21.1005,21.8026],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63,1018.77,1017.62,1016.73,1016.56,1015.64,1014.08,1013.17,1012.55,1011.44,1010.52],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304,20.5604,21.3214,21.5783,21.7863,21.3012,20.3991,20.0265,20.3131,21.1005,21.8026,21.8695],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63,1018.77,1017.62,1016.73,1016.56,1015.64,1014.08,1013.17,1012.55,1011.44,1010.52,1010.88],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304,20.5604,21.3214,21.5783,21.7863,21.3012,20.3991,20.0265,20.3131,21.1005,21.8026,21.8695,21.7829],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63,1018.77,1017.62,1016.73,1016.56,1015.64,1014.08,1013.17,1012.55,1011.44,1010.52,1010.88,1012.42],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304,20.5604,21.3214,21.5783,21.7863,21.3012,20.3991,20.0265,20.3131,21.1005,21.8026,21.8695,21.7829,21.7863],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63,1018.77,1017.62,1016.73,1016.56,1015.64,1014.08,1013.17,1012.55,1011.44,1010.52,1010.88,1012.42,1012.95],[18.9923,21.5033,21.0487,21.578,21.671,21.0241,18.2467,19.0233,19.8107,20.6642,19.3886,20.2982,21.0163,20.8695,20.382,20.3817,20.0958,21.7155,21.0783,21.5849,21.7614,22.5707,22.1295,21.3686,20.7919,21.5304,20.5604,21.3214,21.5783,21.7863,21.3012,20.3991,20.0265,20.3131,21.1005,21.8026,21.8695,21.7829,21.7863,21.2599],[1013.65,1013.6,1014.08,1013.65,1013.73,1015.11,1015.46,1013.95,1014.34,1014.93,1015.7,1016.02,1016.12,1017.13,1017.18,1016.48,1016.83,1017.29,1017.52,1017.26,1017.06,1017.74,1017.69,1017.49,1017.7,1018.63,1018.77,1017.62,1016.73,1016.56,1015.64,1014.08,1013.17,1012.55,1011.44,1010.52,1010.88,1012.42,1012.95,1013.36]])
+                        }
+                });
+
+                toolbar.attachEvent("onClick", function(id,state) {
+                        if(id == "pdf"){
+                                chart.exportChart({
+                                        type: 'application/pdf'
+                                });
+                        }
+                        if(id == "png"){
+                                chart.exportChart();
+                        }
+                        if(id == "jpeg"){
+                                chart.exportChart({
+                                        type: 'image/jpeg'
+                                });
+                        }
+                        if(id == "svg"){
+                                chart.exportChart({
+                                        type: 'image/svg+xml'
+                                });
+                        }
+                        if(id == "yazdir"){
+                                chart.print();
+                        }
+                        if(id == "excel"){
+//                              chart.print();
+                                mygrid.toExcel('grid-excel/generate.php');
+                        }
+                });
+                dhxLayout.cells("b").attachObject("metg");
+                var contHeight = $('#metg').height();
+
+                windGram()
+                for (var i=1; i<=arr.length; i++) {
+                        mygrid.setCellTextStyle(i,1,"/*color:red;*/border-left:2px dotted #383838;");
+                        mygrid.setCellTextStyle(i,3,"/*color:red;*/border-right:2px dotted #383838;");
+                        mygrid.setCellTextStyle(i,5,"color:#355087;");
+                        mygrid.setCellTextStyle(i,6,"color:#355087;border-right:2px dotted #383838;");
+                }
+
+//DHTMLXGrid içinde seçilen satır değişince, Highcharts daki infowindow u  tetikleyen fonksiyon
+                mygrid.attachEvent("onRowSelect", function(id,ind){
+                        var points = [];
+                        points.push(chart.series[0].data[id-1]);
+                        points.push(chart.series[1].data[id-1]);
+                        if(wavebool){
+                                points.push(chart.series[2].data[id-1]);
+                        }
+                        chart.tooltip.refresh(points);
+                });
+        </script>
+        </body>
+</html>

@@ -1,12 +1,15 @@
+// Sayfa tamamen yüklendiğinde tüm kodların çalışmasını sağlar
 document.addEventListener('DOMContentLoaded', () => {
 
     // ====================================================================
-    // YARDIMCI FONKSİYONLAR
+    // YARDIMCI FONKSİYON: Verileri yorumlayıp doğru gösterimi sağlar.
     // ====================================================================
     function getDisplayContent(header, cellValue) {
         if (!cellValue || typeof cellValue !== 'string' || !cellValue.endsWith('.png')) {
             return cellValue;
         }
+
+        // Yön verilerini güvenilir metin olarak döndür
         const directions = ["K", "KDK", "KD", "DKD", "D", "DGD", "GD", "GGD", "G", "GGB", "GB", "BGB", "B", "BKB", "KB", "KKB", "K"];
         if (header.includes('Yonu')) {
             const match = cellValue.match(/(\d+)/);
@@ -16,18 +19,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 return directions[index];
             }
         }
+
+        // Hava Durumu için sevdiğiniz ikonları geri getir
         if (header.includes('Hava Durumu')) {
-            if (cellValue.includes('acik-gunduz')) return 'Açık';
-            if (cellValue.includes('acik-gece')) return 'Açık';
-            if (cellValue.includes('acikazbulutlu')) return 'Az Bulutlu';
-            if (cellValue.includes('cokbulutlu')) return 'Çok Bulutlu';
-            if (cellValue.includes('yagmurlu')) return 'Yağmurlu';
+            if (cellValue.includes('acik')) return '☀️';
+            if (cellValue.includes('bulutlu')) return '☁️'; // 'acikazbulutlu' ve 'cokbulutlu' da bunu kullanır
+            if (cellValue.includes('yagmurlu')) return '🌧️';
         }
-        return '';
+
+        return ''; // Eşleşme bulunamazsa boş döndür
     }
 
     // ====================================================================
-    // ANA İŞLEM: Tabloyu doldurma
+    // ANA İŞLEM: veriler.json'dan verileri çekip HTML tablosunu oluşturur.
     // ====================================================================
     fetch('veriler.json')
         .then(response => {
@@ -35,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(data => {
-            // ... (Bu kısım aynı, değişiklik yok) ...
             const tableBody = document.getElementById('table-body');
             const tableHeadersContainer = document.getElementById('table-headers');
             if (!data || data.length === 0) return;
@@ -57,32 +60,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 tableBody.appendChild(row);
             });
         })
-        .catch(error => console.error('Tablo oluşturulurken hata oluştu:', error));
+        .catch(error => {
+            console.error('Tablo oluşturulurken hata oluştu:', error);
+            const tableBody = document.getElementById('table-body');
+            if (tableBody) {
+                tableBody.innerHTML = '<tr><td colspan="10" style="color: red; text-align:center;">Veriler yüklenemedi. Lütfen daha sonra tekrar deneyin.</td></tr>';
+            }
+        });
 
     // ====================================================================
     // BUTON İŞLEVLERİ
     // ====================================================================
     const shareButton = document.getElementById('shareButton');
     const downloadPdfButton = document.getElementById('downloadPdfButton');
+    const shareFeedback = document.getElementById('shareFeedback');
 
     // 1. Paylaş Butonu
     if (shareButton) {
-        shareButton.addEventListener('click', () => { /* ... Kopyalama Kodu ... */ });
+        shareButton.addEventListener('click', () => {
+             navigator.clipboard.writeText(window.location.href)
+                .then(() => {
+                    shareFeedback.textContent = 'Link kopyalandı!';
+                    setTimeout(() => { shareFeedback.textContent = ''; }, 2000);
+                })
+                .catch(err => {
+                    console.error('Link kopyalanamadı: ', err);
+                });
+        });
     }
 
-    // 2. PDF İndirme Butonu (NİHAİ MOBİL ÇÖZÜMÜ)
+    // 2. PDF İndirme Butonu (Mobil Uyumlu Nihai Çözüm)
     if (downloadPdfButton) {
         downloadPdfButton.addEventListener('click', () => {
             const originalTable = document.getElementById('data-table');
             if (!originalTable) return;
 
-            // 1. Bir perde (overlay) ve klonlanmış tablo oluştur
             const overlay = document.createElement('div');
             overlay.id = 'pdf-overlay';
             const clone = originalTable.cloneNode(true);
             overlay.appendChild(clone);
             document.body.appendChild(overlay);
-            overlay.style.display = 'flex'; // Perdeyi göster
+            overlay.style.display = 'flex';
 
             const opt = {
                 margin: 0.3,
@@ -92,13 +110,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
             };
 
-            // 2. PDF'i, perdenin içindeki klonlanmış tablodan oluştur
             html2pdf().from(clone).set(opt).save().then(() => {
-                // 3. İşlem bittiğinde perdeyi kaldır
                 document.body.removeChild(overlay);
             }).catch((err) => {
                 console.error("PDF oluşturulurken hata oluştu:", err);
-                // Hata durumunda bile perdeyi kaldır
                 document.body.removeChild(overlay);
             });
         });

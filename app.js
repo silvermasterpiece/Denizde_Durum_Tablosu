@@ -76,16 +76,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     // ====================================================================
-    // BUTON İŞLEVLERİ (Aynı kalıyor)
+    // BUTON İŞLEVLERİ
     // ====================================================================
     const shareButton = document.getElementById('shareButton');
     const downloadPdfButton = document.getElementById('downloadPdfButton');
     const shareFeedback = document.getElementById('shareFeedback');
 
     if (shareButton) {
-        shareButton.addEventListener('click', () => { /* ... Kopyalama Kodu ... */ });
+        shareButton.addEventListener('click', () => {
+             navigator.clipboard.writeText(window.location.href)
+                .then(() => {
+                    shareFeedback.textContent = 'Link kopyalandı!';
+                    setTimeout(() => { shareFeedback.textContent = ''; }, 2000);
+                })
+                .catch(err => {
+                    console.error('Link kopyalanamadı: ', err);
+                });
+        });
     }
+
     if (downloadPdfButton) {
-        downloadPdfButton.addEventListener('click', () => { /* ... PDF Kodu ... */ });
+        downloadPdfButton.addEventListener('click', () => {
+            const element = document.getElementById('data-table');
+            const opt = {
+              margin:       0.5,
+              filename:     'deniz-durum-tablosu.pdf',
+              image:        { type: 'jpeg', quality: 0.98 },
+              html2canvas:  { scale: 2 },
+              jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+            };
+            html2pdf().from(element).set(opt).save();
+        });
     }
 });

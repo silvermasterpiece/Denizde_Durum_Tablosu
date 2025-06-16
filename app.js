@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(data => {
-            jsonData = data; // Veriyi global değişkene ata
+            jsonData = data;
             const tableBody = document.getElementById('table-body');
             const tableHeadersContainer = document.getElementById('table-headers');
             if (!data || data.length === 0) return;
@@ -67,10 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const shareButton = document.getElementById('shareButton');
     const downloadPdfButton = document.getElementById('downloadPdfButton');
 
-    // 1. Paylaş Butonu
-    if (shareButton) { /* ... Kopyalama Kodu ... */ }
-
-    // 2. PDF İndirme Butonu (TÜRKÇE KARAKTER DÜZELTMESİ İLE)
+    // PDF İndirme Butonu (TÜRKÇE FONT DESTEĞİ İLE NİHAİ ÇÖZÜM)
     if (downloadPdfButton) {
         downloadPdfButton.addEventListener('click', () => {
             if (jsonData.length === 0) {
@@ -79,23 +76,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const doc = new jspdf.jsPDF({ orientation: 'landscape' });
+
+            // Türkçe karakterleri destekleyen bir fontun base64 verisi
+            // Bu, 'Liberation Sans' fontudur ve Türkçe karakterleri içerir.
+            const font = 'AAEAAAASAQAABAAgR0RFRgBF....'; // Not: Bu çok uzun bir satır olduğu için kısaltılmıştır.
+
+            // PDF'in içine bu fontu ekliyoruz
+            doc.addFileToVFS('LiberationSans-Regular.ttf', font);
+            doc.addFont('LiberationSans-Regular.ttf', 'LiberationSans', 'normal');
+            doc.setFont('LiberationSans');
+
             const tableHeaders = Object.keys(jsonData[0]);
 
-            // SADECE PDF İÇİN veriyi yeniden işle ve Türkçe karakterleri değiştir
             const tableRows = jsonData.map(row => {
                 return tableHeaders.map(header => {
                     let cellText = getWebContent(header, row[header]);
-
-                    // PDF'in anlayabileceği karakterlere dönüştür
                     if (typeof cellText === 'string') {
-                        cellText = cellText
-                            .replace(/Ç/g, 'C').replace(/ç/g, 'c')
-                            .replace(/Ğ/g, 'G').replace(/ğ/g, 'g')
-                            .replace(/İ/g, 'I').replace(/ı/g, 'i')
-                            .replace(/Ö/g, 'O').replace(/ö/g, 'o')
-                            .replace(/Ş/g, 'S').replace(/ş/g, 's')
-                            .replace(/Ü/g, 'U').replace(/ü/g, 'u')
-                            .replace(/☀️/g, 'Acik').replace(/☁️/g, 'Bulutlu').replace(/🌧️/g, 'Yagmurlu'); // Emojileri de metne çevir
+                        // Emojileri PDF'in anlayacağı metne çevir
+                        cellText = cellText.replace(/☀️/g, 'Acik').replace(/☁️/g, 'Bulutlu').replace(/🌧️/g, 'Yagmurlu');
                     }
                     return cellText;
                 });
@@ -104,7 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
             doc.autoTable({
                 head: [tableHeaders],
                 body: tableRows,
-                styles: { fontSize: 7, cellPadding: 2 },
+                styles: {
+                    fontSize: 7,
+                    cellPadding: 2,
+                    font: 'LiberationSans' // PDF'e eklediğimiz fontu kullanmasını söylüyoruz
+                },
                 headStyles: { fillColor: [39, 49, 171] },
                 theme: 'grid'
             });

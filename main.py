@@ -10,7 +10,7 @@ HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
 }
 
-# --- Dosya Yolu Ayarları (Otomasyon ile uyumlu) ---
+# --- Dosya Yolu Ayarları ---
 script_dir = os.path.dirname(os.path.abspath(__file__))
 json_path = os.path.join(script_dir, 'veriler.json')
 
@@ -22,74 +22,72 @@ def fetch_and_save_data():
     print("MGM sitesine bağlanılıyor...")
     try:
         response = requests.get(URL, headers=HEADERS)
-        response.raise_for_status()  # HTTP hatalarını kontrol et
+        response.raise_for_status()
         html_content = response.text
         print("Sayfa içeriği başarıyla indirildi.")
     except requests.exceptions.RequestException as e:
         print(f"HATA: Siteye bağlanırken bir sorun oluştu: {e}")
         return
 
-    # BeautifulSoup ile HTML içeriğini analiz et
     soup = BeautifulSoup(html_content, 'html.parser')
     scripts = soup.find_all('script')
 
     data_string = None
     header_string = None
 
-    # Tüm script bloklarını gezerek veri ve başlıkları ara
+    # Tüm script bloklarını gez
     for script in scripts:
         if not script.string:
             continue
 
-        # 1. Veri dizisini bul (mygrid.parse içindeki)
-        # Bu regex, mygrid.parse(...) satırını bulur ve içindeki [[...]] kısmını yakalar.
-        data_match = re.search(r'mygrid\.parse\((.+?),"jsarray"\);', script.string, re.DOTALL)
-        if data_match:
-            # Yakalanan grup genellikle 'arr' değişken adıdır. Biz doğrudan diziye odaklanacağız.
-            # Bazen doğrudan dizi verilir, bazen 'arr' değişkeni. Her iki durumu da ele alalım.
-            potential_data = data_match.group(1).strip()
-            if potential_data.startswith('[['):
-                data_string = potential_data
-            elif potential_data == 'arr':
-                # Eğer 'arr' ise, aynı script içinde 'var arr = [...]' tanımını bul
-                arr_match = re.search(r'var arr = (\[\[.*?\]\]);', script.string, re.DOTALL)
-                if arr_match:
-                    data_string = arr_match.group(1)
+        # YENİ VE DAHA AKILLI YÖNTEM:
+        # 'var arr = [...]' tanımını ve hemen ardından gelen 'mygrid.parse(arr,...)' kullanımını
+        # aynı anda arayan bir Regex deseni kullanıyoruz. Bu, doğru veri bloğunu garantiler.
+        match = re.search(r'var arr = (\[\[.*?\]\]);\s*mygrid\.parse\(arr,"jsarray"\);', script.string, re.DOTALL)
 
-        # 2. Başlıkları bul (mygrid.setHeader içindeki)
-        header_match = re.search(r'mygrid\.setHeader\("(.*?)"', script.string)
-        if header_match:
-            header_string = header_match.group(1)
+        if match:
+            # Doğru veri bloğunu bulduk.
+            data_string = match.group(1)
+
+            # Aynı script bloğu içindeki başlıkları da bulalım.
+            header_match = re.search(r'mygrid\.setHeader\("(.*?)"', script.string)
+            if header_match:
+                header_string = header_match.group(1)
+
+            # Doğru veriyi bulduğumuz için döngüden çıkabiliriz.
+            break
 
     # Veri ve başlık bulunduktan sonra JSON dosyasına yaz
     if data_string and header_string:
-        print("Veri ve başlıklar bulundu, işleniyor...")
+        print("Doğru veri ve başlıklar bulundu, işleniyor...")
         try:
             headers_list = [h.strip() for h in header_string.split(',')]
-            table_data = json.loads(data_string)
+            # Bazen verilerde tek tırnak kullanılabiliyor, bunu çift tırnağa çeviriyoruz.
+            json_compatible_data_string = data_string.replace("'", '"')
+            table_data = json.loads(json_compatible_data_string)
 
             formatted_data = []
             for row in table_data:
                 record = {}
-                # Her satırdaki veriyi başlıkla eşleştir
-                # Bazen satırda eksik veri olabilir, bunu kontrol ediyoruz
                 for i, header in enumerate(headers_list):
                     if i < len(row):
                         record[header] = row[i]
                     else:
-                        record[header] = ""  # Eksik veri için boş değer ata
+                        record[header] = ""
                 formatted_data.append(record)
 
             with open(json_path, 'w', encoding='utf-8') as f:
                 json.dump(formatted_data, f, ensure_ascii=False, indent=4)
 
-            print(f"✅ Başarıyla tamamlandı! En güncel veriler '{json_path}' dosyasına kaydedildi.")
+            print(f"✅ Başarıyla tamamlandı! En güncel ve DOĞRU veriler '{json_path}' dosyasına kaydedildi.")
         except json.JSONDecodeError as e:
             print(f"HATA: Ayıklanan veri JSON formatına çevrilirken hata oluştu: {e}")
+            print(f"Sorunlu veri: {json_compatible_data_string[:200]}...")  # Hatanın kaynağını görmek için
     else:
-        print("HATA: Sitenin kod yapısı içinde beklenen veri veya başlıklar bulunamadı.")
+        print("HATA: Sitenin kod yapısı içinde beklenen ana tablo verisi bulunamadı.")
 
 
 # --- Script'i Çalıştır ---
 if __name__ == "__main__":
     fetch_and_save_data()
+

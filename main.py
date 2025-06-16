@@ -10,14 +10,14 @@ HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
 }
 
-# --- Dosya Yolu Ayarları ---
+# --- Dosya Yolu Ayarları (Otomasyon ile uyumlu) ---
 script_dir = os.path.dirname(os.path.abspath(__file__))
 json_path = os.path.join(script_dir, 'veriler.json')
 
 
 # --- ANA FONKSİYON ---
 def fetch_and_save_data():
-    """MGM sitesinden verileri çeker ve veriler.json dosyasına kaydeder."""
+    """MGM sitesinden doğru tablo verilerini çeker ve veriler.json dosyasına kaydeder."""
 
     print("MGM sitesine bağlanılıyor...")
     try:
@@ -40,9 +40,9 @@ def fetch_and_save_data():
         if not script.string:
             continue
 
-        # YENİ VE DAHA AKILLI YÖNTEM:
+        # AKILLI YÖNTEM: Sadece ana tabloyu dolduran veri bloğunu hedefle.
         # 'var arr = [...]' tanımını ve hemen ardından gelen 'mygrid.parse(arr,...)' kullanımını
-        # aynı anda arayan bir Regex deseni kullanıyoruz. Bu, doğru veri bloğunu garantiler.
+        # aynı anda arayan bir Regex deseni kullanıyoruz.
         match = re.search(r'var arr = (\[\[.*?\]\]);\s*mygrid\.parse\(arr,"jsarray"\);', script.string, re.DOTALL)
 
         if match:
@@ -54,15 +54,15 @@ def fetch_and_save_data():
             if header_match:
                 header_string = header_match.group(1)
 
-            # Doğru veriyi bulduğumuz için döngüden çıkabiliriz.
+            # Doğru veriyi bulduğumuz için döngüden hemen çıkabiliriz.
             break
 
     # Veri ve başlık bulunduktan sonra JSON dosyasına yaz
     if data_string and header_string:
-        print("Doğru veri ve başlıklar bulundu, işleniyor...")
+        print("Doğru tablo verileri bulundu, işleniyor...")
         try:
             headers_list = [h.strip() for h in header_string.split(',')]
-            # Bazen verilerde tek tırnak kullanılabiliyor, bunu çift tırnağa çeviriyoruz.
+            # JSON'un doğru işlemesi için tek tırnakları çift tırnakla değiştiriyoruz
             json_compatible_data_string = data_string.replace("'", '"')
             table_data = json.loads(json_compatible_data_string)
 
@@ -82,7 +82,6 @@ def fetch_and_save_data():
             print(f"✅ Başarıyla tamamlandı! En güncel ve DOĞRU veriler '{json_path}' dosyasına kaydedildi.")
         except json.JSONDecodeError as e:
             print(f"HATA: Ayıklanan veri JSON formatına çevrilirken hata oluştu: {e}")
-            print(f"Sorunlu veri: {json_compatible_data_string[:200]}...")  # Hatanın kaynağını görmek için
     else:
         print("HATA: Sitenin kod yapısı içinde beklenen ana tablo verisi bulunamadı.")
 
@@ -90,4 +89,3 @@ def fetch_and_save_data():
 # --- Script'i Çalıştır ---
 if __name__ == "__main__":
     fetch_and_save_data()
-

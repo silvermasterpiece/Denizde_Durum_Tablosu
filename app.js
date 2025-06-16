@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // MEVCUT KODUNUZ: verileri çeker ve tabloyu oluşturur
+    // Verileri çeker ve tabloyu oluşturur
     fetch('veriler.json')
         .then(response => response.json())
         .then(data => {
@@ -42,9 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tableBody.innerHTML = '<tr><td colspan="10" style="color: red;">Veriler yüklenemedi.</td></tr>';
         });
 
-    // === YENİ EKLENEN BÖLÜM BAŞLANGICI ===
-
-    // 1. PAYLAŞ BUTONU İŞLEVSELLİĞİ
+    // Paylaş Butonu İşlevselliği
     const shareButton = document.getElementById('shareButton');
     const shareFeedback = document.getElementById('shareFeedback');
 
@@ -62,29 +60,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     });
 
-    // 2. PDF İNDİRME BUTONU İŞLEVSELLİĞİ
+    // PDF İndirme Butonu İşlevselliği
     const downloadPdfButton = document.getElementById('downloadPdfButton');
 
     downloadPdfButton.addEventListener('click', () => {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        doc.autoTable({
-            html: '#data-table',
-            styles: {
-                font: 'helvetica',
-                fontSize: 8
-            },
-            headStyles: {
-                fillColor: [38, 50, 56]
-            },
-            // NOT: Resimleri PDF'e eklemek için daha karmaşık bir kod gerekir.
-            // Bu basit versiyon sadece metinleri ve tablo yapısını alır.
-        });
-
-        doc.save('deniz-durum-tablosu.pdf');
+        const element = document.getElementById('data-table');
+        const opt = {
+          margin:       0.5,
+          filename:     'deniz-durum-tablosu.pdf',
+          image:        { type: 'jpeg', quality: 0.98 },
+          html2canvas:  { scale: 2 },
+          jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+        };
+        html2pdf().from(element).set(opt).save();
     });
-
-    // === YENİ EKLENEN BÖLÜM SONU ===
 
 });

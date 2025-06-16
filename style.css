@@ -52,8 +52,6 @@ td img {
     vertical-align: middle;
 }
 
-/* === YENİ EKLENEN BUTON STİLLERİ === */
-
 #shareButton {
     background-color: #03dac6;
     color: #121212;
@@ -73,7 +71,7 @@ td img {
 }
 
 #downloadPdfButton {
-    background-color: #c62828; /* PDF butonu için farklı bir renk */
+    background-color: #c62828;
     color: white;
     border: none;
     padding: 10px 20px;

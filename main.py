@@ -24,8 +24,8 @@ def fetch_and_save_data():
         response = requests.get(URL, headers=HEADERS)
         response.raise_for_status()
 
-        # --- YENİ EKLENEN DÜZELTME ---
-        # Türkçe karakter sorununu çözmek için karakter kodlamasını UTF-8 olarak zorunlu kılıyoruz.
+        # --- TÜRKÇE KARAKTER DÜZELTMESİ ---
+        # Karakter kodlamasını UTF-8 olarak zorunlu kılarak 'Ç', 'Ş' gibi harflerin doğru okunmasını sağlıyoruz.
         response.encoding = 'utf-8'
 
         html_content = response.text

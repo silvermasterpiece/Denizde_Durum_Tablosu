@@ -1,18 +1,20 @@
-// Sayfa tamamen yüklendiğinde tüm kodların çalışmasını sağlar
 document.addEventListener('DOMContentLoaded', () => {
 
+    let jsonData = []; // Veriyi PDF oluşturma gibi diğer fonksiyonların erişebilmesi için saklıyoruz.
+
     // ====================================================================
-    // YARDIMCI FONKSİYON: Verileri yorumlayıp doğru gösterimi sağlar.
+    // YARDIMCI FONKSİYON: Ham veriyi, tabloda gösterilecek sade metne çevirir.
     // ====================================================================
     function getDisplayContent(header, cellValue) {
+        // Eğer hücre boşsa veya bir resim yolu değilse, değeri olduğu gibi geri döndür.
         if (!cellValue || typeof cellValue !== 'string' || !cellValue.endsWith('.png')) {
             return cellValue;
         }
 
-        // Yön verilerini güvenilir metin olarak döndür
+        // Yönleri metin olarak döndür (örn: KB, GD)
         const directions = ["K", "KDK", "KD", "DKD", "D", "DGD", "GD", "GGD", "G", "GGB", "GB", "BGB", "B", "BKB", "KB", "KKB", "K"];
         if (header.includes('Yonu')) {
-            const match = cellValue.match(/(\d+)/);
+            const match = cellValue.match(/(\d+)/); // Dosya adından dereceyi alır
             if (match) {
                 const angle = parseFloat(match[0]);
                 const index = Math.floor((angle + 11.25) / 22.5);
@@ -20,10 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Hava Durumu için sevdiğiniz ikonları geri getir
+        // Hava Durumunu emoji olarak döndür
         if (header.includes('Hava Durumu')) {
             if (cellValue.includes('acik')) return '☀️';
-            if (cellValue.includes('bulutlu')) return '☁️'; // 'acikazbulutlu' ve 'cokbulutlu' da bunu kullanır
+            if (cellValue.includes('bulutlu')) return '☁️';
             if (cellValue.includes('yagmurlu')) return '🌧️';
         }
 
@@ -39,9 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(data => {
+            jsonData = data; // Veriyi global değişkene ata
             const tableBody = document.getElementById('table-body');
             const tableHeadersContainer = document.getElementById('table-headers');
+
             if (!data || data.length === 0) return;
+
             const headers = Object.keys(data[0]);
             const headerRow = document.createElement('tr');
             headers.forEach(headerText => {
@@ -50,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headerRow.appendChild(th);
             });
             tableHeadersContainer.appendChild(headerRow);
+
             data.forEach(kayit => {
                 const row = document.createElement('tr');
                 headers.forEach(header => {
@@ -64,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Tablo oluşturulurken hata oluştu:', error);
             const tableBody = document.getElementById('table-body');
             if (tableBody) {
-                tableBody.innerHTML = '<tr><td colspan="10" style="color: red; text-align:center;">Veriler yüklenemedi. Lütfen daha sonra tekrar deneyin.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="10" style="color: red; text-align:center;">Veriler yüklenemedi.</td></tr>';
             }
         });
 
@@ -89,33 +95,35 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. PDF İndirme Butonu (Mobil Uyumlu Nihai Çözüm)
+    // 2. PDF İndirme Butonu (Programatik Yöntem - Nihai Çözüm)
     if (downloadPdfButton) {
         downloadPdfButton.addEventListener('click', () => {
-            const originalTable = document.getElementById('data-table');
-            if (!originalTable) return;
+            if (jsonData.length === 0) {
+                alert("Veri henüz yüklenmedi, lütfen bir saniye bekleyip tekrar deneyin.");
+                return;
+            }
 
-            const overlay = document.createElement('div');
-            overlay.id = 'pdf-overlay';
-            const clone = originalTable.cloneNode(true);
-            overlay.appendChild(clone);
-            document.body.appendChild(overlay);
-            overlay.style.display = 'flex';
+            const doc = new jspdf.jsPDF({ orientation: 'landscape' });
 
-            const opt = {
-                margin: 0.3,
-                filename: 'deniz-durum-tablosu.pdf',
-                image: { type: 'jpeg', quality: 0.95 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
-            };
+            const tableHeaders = Object.keys(jsonData[0]);
 
-            html2pdf().from(clone).set(opt).save().then(() => {
-                document.body.removeChild(overlay);
-            }).catch((err) => {
-                console.error("PDF oluşturulurken hata oluştu:", err);
-                document.body.removeChild(overlay);
+            // Veriyi, PDF kütüphanesinin anladığı formata çevir
+            const tableRows = jsonData.map(row => {
+                return tableHeaders.map(header => {
+                    // PDF'e ikonları değil, sade metin hallerini yazdırıyoruz.
+                    return getDisplayContent(header, row[header]);
+                });
             });
+
+            doc.autoTable({
+                head: [tableHeaders],
+                body: tableRows,
+                styles: { fontSize: 7 }, // Yazı tipini küçülterek sığmasını sağlıyoruz
+                headStyles: { fillColor: [39, 49, 171] },
+                theme: 'grid' // Kenarlıklı tablo teması
+            });
+
+            doc.save('deniz-durum-tablosu.pdf');
         });
     }
 });

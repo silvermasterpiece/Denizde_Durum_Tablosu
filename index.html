@@ -6,37 +6,28 @@
     <title>Deniz Durumu Tablosu</title>
     <link rel="stylesheet" href="style.css">
 
-    <!-- PDF oluşturmak için gerekli kütüphane -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" xintegrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- YENİ ve DOĞRU PDF KÜTÜPHANELERİ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
 </head>
 <body>
-
+    <!-- Sayfanın geri kalanında değişiklik yok -->
     <header>
         <h1>Deniz Durumu Tahmin Tablosu</h1>
         <p>En güncel veriler aşağıda listelenmiştir.</p>
-
         <button id="shareButton">Sayfa Linkini Kopyala 🔗</button>
         <button id="downloadPdfButton">Tabloyu PDF Olarak İndir 📄</button>
-
         <span id="shareFeedback"></span>
     </header>
-
     <main>
-        <!-- YENİ: Mobil cihazlarda kaydırmayı sağlamak için tabloyu bir div içine aldık -->
         <div class="table-container">
             <table id="data-table">
-                <thead id="table-headers">
-                    <!-- Başlıklar JavaScript ile eklenecek -->
-                </thead>
-                <tbody id="table-body">
-                    <!-- Veri satırları JavaScript ile eklenecek -->
-                </tbody>
+                <thead id="table-headers"></thead>
+                <tbody id="table-body"></tbody>
             </table>
         </div>
     </main>
-
     <script src="app.js"></script>
-
 </body>
 </html>

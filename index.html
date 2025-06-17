@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,6 +11,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
+
 <body>
   <div class="container">
     <h1>Denizde Durum Tablosu</h1>
@@ -37,9 +39,28 @@
 
       const tableElement = document.getElementById("table-to-print");
 
+      // 1. IMG'leri ALT değeri içeren span ile değiştir
+      const imgElements = tableElement.querySelectorAll("img");
+      const imgBackup = [];
+
+      imgElements.forEach((img, index) => {
+        const altText = img.alt || "Resim";
+        const span = document.createElement("span");
+        span.textContent = altText;
+        span.style.display = "inline-block";
+        span.style.color = "#d32f2f";
+        span.style.fontStyle = "italic";
+        span.style.fontWeight = "bold";
+        span.style.textAlign = "center";
+        span.style.padding = "4px";
+
+        // IMG yedeği al ve span ile değiştir
+        imgBackup.push({ parent: img.parentNode, original: img, placeholder: span });
+        img.replaceWith(span);
+      });
+
       html2canvas(tableElement, {
         scale: 3,
-        useCORS: true,
         scrollX: 0,
         scrollY: -window.scrollY,
         windowWidth: document.body.scrollWidth,
@@ -49,28 +70,32 @@
         const pdf = new jspdf.jsPDF("l", "mm", "a4");
 
         const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-        const imgWidth = pdfWidth;
-        const imgHeight = canvas.height * imgWidth / canvas.width;
-
+        const imgHeight = canvas.height * pdfWidth / canvas.width;
         let heightLeft = imgHeight;
         let position = 0;
 
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pdfHeight;
+        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
+        heightLeft -= pdf.internal.pageSize.getHeight();
 
         while (heightLeft > 0) {
-          position -= pdfHeight;
+          position -= pdf.internal.pageSize.getHeight();
           pdf.addPage();
-          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-          heightLeft -= pdfHeight;
+          pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
+          heightLeft -= pdf.internal.pageSize.getHeight();
         }
 
         pdf.save("deniz_durumu_tablosu.pdf");
+
+        // 2. IMG'leri geri yükle
+        imgBackup.forEach(entry => {
+          entry.placeholder.replaceWith(entry.original);
+        });
+
         overlay.style.display = "none";
       });
     });
   </script>
+
 </body>
+
 </html>

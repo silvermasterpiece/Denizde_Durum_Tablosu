@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   fetch("veriler.json")
     .then(res => res.json())
     .then(data => {
-      const tbody = document.querySelector("#veriTablosu tbody");
+      const tbody = document.querySelector("#main-table tbody");
 
       const getDirectionEmoji = (imgPath) => {
         if (!imgPath) return "";
@@ -41,11 +41,3 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${getDirectionEmoji(item["Dalga Yonu"])}</td>
           <td>${item["Yuksekligi (m)"]}</td>
           <td>${item["Peryod (sn)"]}</td>
-          <td>${getWeatherEmoji(item["Hava Durumu"])}</td>
-          <td>${item["Sicaklik (C)"]}</td>
-          <td>${item["Basinc (mb)"]}</td>
-        `;
-        tbody.appendChild(row);
-      });
-    });
-});

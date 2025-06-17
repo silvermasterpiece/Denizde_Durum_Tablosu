@@ -41,3 +41,11 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${getDirectionEmoji(item["Dalga Yonu"])}</td>
           <td>${item["Yuksekligi (m)"]}</td>
           <td>${item["Peryod (sn)"]}</td>
+          <td>${getWeatherEmoji(item["Hava Durumu"])}</td>
+          <td>${item["Sicaklik (C)"]}</td>
+          <td>${item["Basinc (mb)"]}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    });
+});

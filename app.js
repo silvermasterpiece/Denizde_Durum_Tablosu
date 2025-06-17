@@ -1,34 +1,51 @@
-name: Gunluk Veri Cekme Otomasyonu
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("veriler.json")
+    .then(res => res.json())
+    .then(data => {
+      const tbody = document.querySelector("#veriTablosu tbody");
 
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 6 * * *' # Her gün sabah 6'da (UTC) bir kez çalışır
+      const getDirectionEmoji = (imgPath) => {
+        if (!imgPath) return "";
+        const match = imgPath.match(/(\d+)/);
+        if (!match) return "";
+        const angle = parseInt(match[1]);
+        if (angle >= 337.5 || angle < 22.5) return "⬇️ K";
+        if (angle >= 22.5 && angle < 67.5) return "↙️ KD";
+        if (angle >= 67.5 && angle < 112.5) return "⬅️ D";
+        if (angle >= 112.5 && angle < 157.5) return "↖️ GD";
+        if (angle >= 157.5 && angle < 202.5) return "⬆️ G";
+        if (angle >= 202.5 && angle < 247.5) return "↗️ GB";
+        if (angle >= 247.5 && angle < 292.5) return "➡️ B";
+        if (angle >= 292.5 && angle < 337.5) return "↘️ KB";
+        return "";
+      };
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+      const getWeatherEmoji = (imgPath) => {
+        if (!imgPath) return "";
+        if (imgPath.includes("acik-gunduz")) return "☀️";
+        if (imgPath.includes("acik-gece")) return "🌙";
+        if (imgPath.includes("acikazbulutlu")) return "🌤️";
+        if (imgPath.includes("parcalibulutlu")) return "🌥️";
+        if (imgPath.includes("kapali")) return "☁️";
+        if (imgPath.includes("yagmurlu")) return "🌧️";
+        return "❓";
+      };
 
-    steps:
-      - name: Depoyu Kopyala
-        uses: actions/checkout@v3
-
-      - name: Python'u Kur
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Gerekli Kutuphaneleri Yukle
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests beautifulsoup4
-
-      - name: Veri Cekme Scriptini Calistir
-        run: python main.py
-
-      - name: Degisiklikleri Geri Gonder
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "Otomatik: Deniz durumu verileri güncellendi"
-          branch: main
-          file_pattern: 'veriler.json'
+      data.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item["Tarih/Saat"]}</td>
+          <td>${getDirectionEmoji(item["Ruzgar Yonu"])}</td>
+          <td>${item["Hizi (knot)"]}</td>
+          <td>${item["Hizi (bofor)"]}</td>
+          <td>${getDirectionEmoji(item["Dalga Yonu"])}</td>
+          <td>${item["Yuksekligi (m)"]}</td>
+          <td>${item["Peryod (sn)"]}</td>
+          <td>${getWeatherEmoji(item["Hava Durumu"])}</td>
+          <td>${item["Sicaklik (C)"]}</td>
+          <td>${item["Basinc (mb)"]}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    });
+});

@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Denizde Durum Tablosu</title>
   <link rel="stylesheet" href="style.css" />
+
+  <!-- jsPDF ve AutoTable kütüphaneleri -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -15,8 +17,8 @@
 
     <div class="table-container">
       <table id="main-table">
-        <thead></thead> <!-- ✅ sadece boş thead, id YOK -->
-        <tbody></tbody>
+        <thead id="table-headers"></thead>
+        <tbody id="table-body"></tbody>
       </table>
     </div>
   </div>
@@ -24,35 +26,59 @@
   <!-- PDF Hazırlanıyor Perdesi -->
   <div id="pdf-overlay">PDF hazırlanıyor, lütfen bekleyin...</div>
 
+  <!-- Uygulama Scripti -->
   <script src="app.js"></script>
 
-  <!-- 📄 PDF İNDİRME -->
+  <!-- 📄 PDF İNDİRME (Veri Tabanlı) -->
   <script>
     document.getElementById("downloadPdfButton").addEventListener("click", () => {
       const overlay = document.getElementById("pdf-overlay");
       overlay.style.display = "flex";
 
-      const tableContainer = document.querySelector(".table-container");
+      fetch("veriler.json")
+        .then(res => res.json())
+        .then(data => {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF("landscape", "mm", "a4");
 
-      html2canvas(tableContainer, {
-        scale: 2,
-        scrollX: 0,
-        scrollY: -window.scrollY,
-        windowWidth: document.body.scrollWidth,
-        windowHeight: document.body.scrollHeight
-      }).then(canvas => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jspdf.jsPDF("l", "mm", "a4");
+          const headers = [[
+            "Tarih/Saat",
+            "Rüzgar Yönü",
+            "Rüzgar Hızı (knot)",
+            "Rüzgar Hızı (bofor)",
+            "Dalga Yönü",
+            "Dalga Yüksekliği (m)",
+            "Dalga Periyodu (sn)",
+            "Hava Durumu",
+            "Sıcaklık (°C)",
+            "Basınç (mb)"
+          ]];
 
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+          const rows = data.map(item => [
+            item["Tarih/Saat"] || "",
+            item["Ruzgar Yonu"] || "",
+            item["Hizi (knot)"] || "",
+            item["Hizi (bofor)"] || "",
+            item["Dalga Yonu"] || "",
+            item["Yuksekligi (m)"] || "",
+            item["Peryod (sn)"] || "",
+            item["Hava Durumu"] || "",
+            item["Sicaklik (C)"] || "",
+            item["Basinc (mb)"] || ""
+          ]);
 
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save("deniz_durumu_tablosu.pdf");
+          doc.autoTable({
+            head: headers,
+            body: rows,
+            styles: { fontSize: 8 },
+            headStyles: { fillColor: [57, 73, 171], halign: 'center' },
+            startY: 20,
+            margin: { left: 10, right: 10 }
+          });
 
-        overlay.style.display = "none";
-      });
+          doc.save("deniz_durumu_tablosu.pdf");
+          overlay.style.display = "none";
+        });
     });
   </script>
 </body>

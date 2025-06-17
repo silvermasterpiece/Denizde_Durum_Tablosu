@@ -2,13 +2,29 @@ document.addEventListener("DOMContentLoaded", () => {
   fetch("veriler.json")
     .then(res => res.json())
     .then(data => {
-      const tbody = document.querySelector("#main-table tbody");
+      const tableHead = document.querySelector("#main-table thead");
+      const tableBody = document.querySelector("#main-table tbody");
+
+      // 📌 TABLO BAŞLIKLARI
+      tableHead.innerHTML = `
+        <tr>
+          <th>Tarih/Saat</th>
+          <th>Rüzgar Yönü</th>
+          <th>Rüzgar Hızı (knot)</th>
+          <th>Rüzgar Hızı (bofor)</th>
+          <th>Dalga Yönü</th>
+          <th>Dalga Yüksekliği (m)</th>
+          <th>Dalga Periyodu (sn)</th>
+          <th>Hava Durumu</th>
+          <th>Sıcaklık (°C)</th>
+          <th>Basınç (mb)</th>
+        </tr>
+      `;
 
       const getDirectionEmoji = (imgPath) => {
-        if (!imgPath) return "❓";
+        if (!imgPath) return "";
         const match = imgPath.match(/(\d+)/);
-        if (!match) return "❓";
-
+        if (!match) return "";
         const angle = parseInt(match[1]);
         if (angle >= 337.5 || angle < 22.5) return "⬇️";
         if (angle >= 22.5 && angle < 67.5) return "↙️";
@@ -18,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (angle >= 202.5 && angle < 247.5) return "↗️";
         if (angle >= 247.5 && angle < 292.5) return "➡️";
         if (angle >= 292.5 && angle < 337.5) return "↘️";
-        return "❓";
+        return "";
       };
 
       const getWeatherEmoji = (imgPath) => {
@@ -46,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${item["Sicaklik (C)"]}</td>
           <td>${item["Basinc (mb)"]}</td>
         `;
-        tbody.appendChild(row);
+        tableBody.appendChild(row);
       });
     });
 });

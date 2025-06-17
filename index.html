@@ -20,35 +20,36 @@
     </div>
   </div>
 
+  <div id="pdf-overlay">PDF hazırlanıyor, lütfen bekleyin...</div>
+
   <script src="app.js"></script>
 
-  <!-- 📄 PDF İNDİRME KODU -->
+  <!-- 📄 PDF İNDİRME -->
   <script>
     document.getElementById("downloadPdfButton").addEventListener("click", () => {
-      const table = document.querySelector(".table-container");
+      const overlay = document.getElementById("pdf-overlay");
+      overlay.style.display = "flex";
 
-      html2canvas(table).then(canvas => {
+      const tableContainer = document.querySelector(".table-container");
+
+      html2canvas(tableContainer, {
+        scale: 2,
+        scrollX: 0,
+        scrollY: -window.scrollY,
+        windowWidth: document.body.scrollWidth,
+        windowHeight: document.body.scrollHeight
+      }).then(canvas => {
         const imgData = canvas.toDataURL("image/png");
-        const pdf = new jspdf.jsPDF("p", "mm", "a4");
+        const pdf = new jspdf.jsPDF("l", "mm", "a4");
 
-        const imgWidth = 210; // A4 width
-        const pageHeight = 297; // A4 height
-        const imgHeight = canvas.height * imgWidth / canvas.width;
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-        let heightLeft = imgHeight;
-        let position = 0;
-
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-
-        while (heightLeft > 0) {
-          position = heightLeft - imgHeight;
-          pdf.addPage();
-          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
-        }
-
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
         pdf.save("deniz_durumu_tablosu.pdf");
+
+        overlay.style.display = "none";
       });
     });
   </script>

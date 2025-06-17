@@ -2,81 +2,73 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import json
-import os
 
-# --- Proje Ayarları ---
 URL = "https://dts.mgm.gov.tr/dts/v1/nokta.php?xx=343&yy=1302&lt=41.428&ln=36.384&marina=False"
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    "User-Agent": "Mozilla/5.0"
 }
 
-# --- Dosya Yolu Ayarları ---
-script_dir = os.path.dirname(os.path.abspath(__file__))
-json_path = os.path.join(script_dir, 'veriler.json')
+WEATHER_MAP = {
+    "acik-gunduz": "wi-day-sunny",
+    "acik-gece": "wi-night-clear",
+    "yagmurlu": "wi-rain",
+    "cokbulutlu": "wi-cloudy",
+    "parcali-bulutlu": "wi-day-cloudy",
+    "acikazbulutlu": "wi-day-sunny-overcast"
+}
 
+# Yardımcı: img/343c.png → 340
+def extract_degree(path):
+    match = re.search(r"(\d+)", path)
+    if match:
+        return str(round(int(match.group(1)) / 10) * 10)
+    return ""
 
-# --- ANA FONKSİYON ---
-def fetch_and_save_data():
-    """MGM sitesinden doğru tablo verilerini çeker ve veriler.json dosyasına kaydeder."""
+def simplify_icon(path):
+    name = path.split("/")[-1].replace(".png", "")
+    return WEATHER_MAP.get(name, "wi-na")
 
-    print("MGM sitesine bağlanılıyor...")
-    try:
-        response = requests.get(URL, headers=HEADERS)
-        response.raise_for_status()
+def fetch_mgm():
+    r = requests.get(URL, headers=HEADERS)
+    r.raise_for_status()
+    r.encoding = "utf-8"
 
-        # --- TÜRKÇE KARAKTER DÜZELTMESİ ---
-        # Karakter kodlamasını UTF-8 olarak zorunlu kılarak 'Ç', 'Ş' gibi harflerin doğru okunmasını sağlıyoruz.
-        response.encoding = 'utf-8'
+    soup = BeautifulSoup(r.text, "html.parser")
+    scripts = soup.find_all("script")
 
-        html_content = response.text
-        print("Sayfa içeriği başarıyla indirildi.")
-    except requests.exceptions.RequestException as e:
-        print(f"HATA: Siteye bağlanırken bir sorun oluştu: {e}")
-        return
-
-    soup = BeautifulSoup(html_content, 'html.parser')
-    scripts = soup.find_all('script')
-
-    data_string = None
-    header_string = None
-
+    data_str, header_str = None, None
     for script in scripts:
         if not script.string:
             continue
-
-        match = re.search(r'var arr = (\[\[.*?\]\]);\s*mygrid\.parse\(arr,"jsarray"\);', script.string, re.DOTALL)
-
-        if match:
-            data_string = match.group(1)
-            header_match = re.search(r'mygrid\.setHeader\("(.*?)"', script.string)
-            if header_match:
-                header_string = header_match.group(1)
+        data_match = re.search(r'var arr = (\[\[.*?\]\]);', script.string, re.DOTALL)
+        header_match = re.search(r'mygrid.setHeader\("(.*?)"\)', script.string)
+        if data_match:
+            data_str = data_match.group(1)
+        if header_match:
+            header_str = header_match.group(1)
+        if data_str and header_str:
             break
 
-    if data_string and header_string:
-        print("Doğru tablo verileri bulundu, işleniyor...")
-        try:
-            headers_list = [h.strip() for h in header_string.split(',')]
-            json_compatible_data_string = data_string.replace("'", '"')
-            table_data = json.loads(json_compatible_data_string)
+    if not data_str or not header_str:
+        raise ValueError("Tablo verisi bulunamadı!")
 
-            formatted_data = []
-            for row in table_data:
-                record = {}
-                for i, header in enumerate(headers_list):
-                    record[header] = row[i] if i < len(row) else ""
-                formatted_data.append(record)
+    headers = [h.strip() for h in header_str.split(",")]
+    rows = json.loads(data_str.replace("'", '"'))
 
-            with open(json_path, 'w', encoding='utf-8') as f:
-                json.dump(formatted_data, f, ensure_ascii=False, indent=4)
+    result = []
+    for row in rows:
+        item = {}
+        for i, h in enumerate(headers):
+            val = row[i] if i < len(row) else ""
+            if "Ruzgar Yonu" in h or "Dalga Yonu" in h:
+                val = extract_degree(val)
+            elif "Hava Durumu" in h:
+                val = simplify_icon(val)
+            item[h] = val
+        result.append(item)
 
-            print(f"✅ Başarıyla tamamlandı! En güncel ve DOĞRU veriler '{json_path}' dosyasına kaydedildi.")
-        except Exception as e:
-            print(f"HATA: Veri işlenirken bir sorun oluştu: {e}")
-    else:
-        print("HATA: Sitenin kod yapısı içinde beklenen ana tablo verisi bulunamadı.")
+    with open("veriler.json", "w", encoding="utf-8") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
 
-
-# --- Script'i Çalıştır ---
 if __name__ == "__main__":
-    fetch_and_save_data()
+    fetch_mgm()

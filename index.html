@@ -1,33 +1,25 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deniz Durumu Tablosu</title>
-    <link rel="stylesheet" href="style.css">
-
-    <!-- PDF OLUŞTURMAK İÇİN GEREKLİ KÜTÜPHANELER -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Denizde Durum Tablosu</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-    <!-- Sayfanın geri kalanında değişiklik yok -->
-    <header>
-        <h1>Deniz Durumu Tahmin Tablosu</h1>
-        <p>En güncel veriler aşağıda listelenmiştir.</p>
-        <button id="shareButton">Sayfa Linkini Kopyala 🔗</button>
-        <button id="downloadPdfButton">Tabloyu PDF Olarak İndir 📄</button>
-        <span id="shareFeedback"></span>
-    </header>
-    <main>
-        <div class="table-container">
-            <table id="data-table">
-                <thead id="table-headers"></thead>
-                <tbody id="table-body"></tbody>
-            </table>
-        </div>
-    </main>
-    <script src="app.js"></script>
+  <div class="container">
+    <h1>Denizde Durum Tablosu</h1>
+    <button id="downloadPdfButton">Bakımdayım</button>
+    <div class="table-container">
+      <table id="main-table">
+        <thead id="table-headers"></thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>

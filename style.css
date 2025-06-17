@@ -66,6 +66,11 @@ thead {
   z-index: 1;
 }
 
+/* ✅ Başlıklar PDF'de ve canlı sayfada görünür kalsın */
+thead {
+  display: table-header-group !important;
+}
+
 tbody tr:nth-child(even) {
   background-color: #f8f9fa;
 }

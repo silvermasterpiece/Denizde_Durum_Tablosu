@@ -12,14 +12,16 @@
   <div class="container">
     <h1>Denizde Durum Tablosu</h1>
     <button id="downloadPdfButton">📄 Tabloyu PDF Olarak İndir</button>
+
     <div class="table-container">
       <table id="main-table">
-        <thead id="table-headers"></thead>
-        <tbody id="table-body"></tbody>
+        <thead></thead> <!-- ✅ sadece boş thead, id YOK -->
+        <tbody></tbody>
       </table>
     </div>
   </div>
 
+  <!-- PDF Hazırlanıyor Perdesi -->
   <div id="pdf-overlay">PDF hazırlanıyor, lütfen bekleyin...</div>
 
   <script src="app.js"></script>

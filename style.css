@@ -8,9 +8,10 @@ body {
 }
 
 .container {
-  max-width: 1200px;
-  margin: auto;
+  width: 100%;
+  max-width: 100%;
   padding: 20px;
+  box-sizing: border-box;
 }
 
 h1 {
@@ -43,6 +44,7 @@ button:hover {
   background: white;
   border-radius: 6px;
   box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  width: 100%;
 }
 
 table {
@@ -64,10 +66,6 @@ thead {
   position: sticky;
   top: 0;
   z-index: 1;
-}
-
-/* ✅ Başlıklar PDF'de ve canlı sayfada görünür kalsın */
-thead {
   display: table-header-group !important;
 }
 
@@ -106,6 +104,7 @@ tbody tr:hover {
 @media screen and (max-width: 768px) {
   table {
     font-size: 13px;
+    min-width: 768px;
   }
 
   button {

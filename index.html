@@ -6,19 +6,19 @@
   <title>Denizde Durum Tablosu</title>
   <link rel="stylesheet" href="style.css" />
 
-  <!-- jsPDF ve AutoTable kütüphaneleri -->
+  <!-- jsPDF ve html2canvas -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
   <div class="container">
     <h1>Denizde Durum Tablosu</h1>
     <button id="downloadPdfButton">📄 Tabloyu PDF Olarak İndir</button>
 
-    <div class="table-container">
+    <div class="table-container" id="table-to-print">
       <table id="main-table">
-        <thead id="table-headers"></thead>
-        <tbody id="table-body"></tbody>
+        <thead></thead>
+        <tbody></tbody>
       </table>
     </div>
   </div>
@@ -26,59 +26,50 @@
   <!-- PDF Hazırlanıyor Perdesi -->
   <div id="pdf-overlay">PDF hazırlanıyor, lütfen bekleyin...</div>
 
-  <!-- Uygulama Scripti -->
+  <!-- app.js -->
   <script src="app.js"></script>
 
-  <!-- 📄 PDF İNDİRME (Veri Tabanlı) -->
+  <!-- 📄 Görsel tabanlı PDF indirme -->
   <script>
     document.getElementById("downloadPdfButton").addEventListener("click", () => {
       const overlay = document.getElementById("pdf-overlay");
       overlay.style.display = "flex";
 
-      fetch("veriler.json")
-        .then(res => res.json())
-        .then(data => {
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF("landscape", "mm", "a4");
+      const tableElement = document.getElementById("table-to-print");
 
-          const headers = [[
-            "Tarih/Saat",
-            "Rüzgar Yönü",
-            "Rüzgar Hızı (knot)",
-            "Rüzgar Hızı (bofor)",
-            "Dalga Yönü",
-            "Dalga Yüksekliği (m)",
-            "Dalga Periyodu (sn)",
-            "Hava Durumu",
-            "Sıcaklık (°C)",
-            "Basınç (mb)"
-          ]];
+      html2canvas(tableElement, {
+        scale: 3,
+        useCORS: true,
+        scrollX: 0,
+        scrollY: -window.scrollY,
+        windowWidth: document.body.scrollWidth,
+        windowHeight: document.body.scrollHeight
+      }).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jspdf.jsPDF("l", "mm", "a4");
 
-          const rows = data.map(item => [
-            item["Tarih/Saat"] || "",
-            item["Ruzgar Yonu"] || "",
-            item["Hizi (knot)"] || "",
-            item["Hizi (bofor)"] || "",
-            item["Dalga Yonu"] || "",
-            item["Yuksekligi (m)"] || "",
-            item["Peryod (sn)"] || "",
-            item["Hava Durumu"] || "",
-            item["Sicaklik (C)"] || "",
-            item["Basinc (mb)"] || ""
-          ]);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
 
-          doc.autoTable({
-            head: headers,
-            body: rows,
-            styles: { fontSize: 8 },
-            headStyles: { fillColor: [57, 73, 171], halign: 'center' },
-            startY: 20,
-            margin: { left: 10, right: 10 }
-          });
+        const imgWidth = pdfWidth;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
 
-          doc.save("deniz_durumu_tablosu.pdf");
-          overlay.style.display = "none";
-        });
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pdfHeight;
+
+        while (heightLeft > 0) {
+          position -= pdfHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+          heightLeft -= pdfHeight;
+        }
+
+        pdf.save("deniz_durumu_tablosu.pdf");
+        overlay.style.display = "none";
+      });
     });
   </script>
 </body>

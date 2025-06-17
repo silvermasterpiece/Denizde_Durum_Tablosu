@@ -19,6 +19,38 @@
       </table>
     </div>
   </div>
-  <script src="app.js"></script> <!-- doğru dosya adı -->
+
+  <script src="app.js"></script>
+
+  <!-- 📄 PDF İNDİRME KODU -->
+  <script>
+    document.getElementById("downloadPdfButton").addEventListener("click", () => {
+      const table = document.querySelector(".table-container");
+
+      html2canvas(table).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jspdf.jsPDF("p", "mm", "a4");
+
+        const imgWidth = 210; // A4 width
+        const pageHeight = 297; // A4 height
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft > 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+
+        pdf.save("deniz_durumu_tablosu.pdf");
+      });
+    });
+  </script>
 </body>
 </html>

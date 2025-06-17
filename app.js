@@ -46,7 +46,13 @@ document.addEventListener("DOMContentLoaded", () => {
         else if (imgPath.includes("parcalibulutlu")) emoji = "🌥️";
         else if (imgPath.includes("kapali")) emoji = "☁️";
         else if (imgPath.includes("yagmurlu")) emoji = "🌧️";
-        else if (imgPath.includes("cokbulutlu")) emoji = "🌦️";
+        else if (imgPath.includes("cokbulutlu")) emoji = "☁️";
+        else if (imgPath.includes("sisli")) emoji = "🌫️";
+        else if (imgPath.includes("kar")) emoji = "❄️";
+        else if (imgPath.includes("karsimsi")) emoji = "🌨️";
+        else if (imgPath.includes("dolu")) emoji = "🌩️";
+        else if (imgPath.includes("firtina")) emoji = "🌪️";
+               
         return `<img src="https://dts.mgm.gov.tr/dts/v1/${imgPath}" alt="${emoji}">`;
       };
 

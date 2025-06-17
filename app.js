@@ -1,0 +1,34 @@
+name: Gunluk Veri Cekme Otomasyonu
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *' # Her gün sabah 6'da (UTC) bir kez çalışır
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Depoyu Kopyala
+        uses: actions/checkout@v3
+
+      - name: Python'u Kur
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Gerekli Kutuphaneleri Yukle
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      - name: Veri Cekme Scriptini Calistir
+        run: python main.py
+
+      - name: Degisiklikleri Geri Gonder
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Otomatik: Deniz durumu verileri güncellendi"
+          branch: main
+          file_pattern: 'veriler.json'

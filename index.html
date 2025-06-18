@@ -6,16 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Denizde Durum Tablosu</title>
   <link rel="stylesheet" href="style.css" />
-
-  <!-- jsPDF ve html2canvas -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 
 <body>
   <div class="container">
     <h1>Denizde Durum Tablosu</h1>
-    <button id="downloadPdfButton">📄 Tabloyu PDF Olarak İndir</button>
+    <button id="downloadPngButton">🖼️ Tabloyu PNG Olarak İndir</button>
 
     <div class="table-container" id="table-to-print">
       <table id="main-table">
@@ -25,77 +21,8 @@
     </div>
   </div>
 
-  <!-- PDF Hazırlanıyor Perdesi -->
-  <div id="pdf-overlay">PDF hazırlanıyor, lütfen bekleyin...</div>
-
-  <!-- app.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="app.js"></script>
-
-  <!-- 📄 Görsel tabanlı PDF indirme -->
-  <script>
-    document.getElementById("downloadPdfButton").addEventListener("click", () => {
-      const overlay = document.getElementById("pdf-overlay");
-      overlay.style.display = "flex";
-
-      const tableElement = document.getElementById("table-to-print");
-
-      // 1. IMG'leri ALT değeri içeren span ile değiştir
-      const imgElements = tableElement.querySelectorAll("img");
-      const imgBackup = [];
-
-      imgElements.forEach((img, index) => {
-        const altText = img.alt || "Resim";
-        const span = document.createElement("span");
-        span.textContent = altText;
-        span.style.display = "inline-block";
-        span.style.color = "#d32f2f";
-        span.style.fontStyle = "italic";
-        span.style.fontWeight = "bold";
-        span.style.textAlign = "center";
-        span.style.padding = "4px";
-
-        // IMG yedeği al ve span ile değiştir
-        imgBackup.push({ parent: img.parentNode, original: img, placeholder: span });
-        img.replaceWith(span);
-      });
-
-      html2canvas(tableElement, {
-        scale: 3,
-        scrollX: 0,
-        scrollY: -window.scrollY,
-        windowWidth: document.body.scrollWidth,
-        windowHeight: document.body.scrollHeight
-      }).then(canvas => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jspdf.jsPDF("l", "mm", "a4");
-
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const imgHeight = canvas.height * pdfWidth / canvas.width;
-        let heightLeft = imgHeight;
-        let position = 0;
-
-        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
-        heightLeft -= pdf.internal.pageSize.getHeight();
-
-        while (heightLeft > 0) {
-          position -= pdf.internal.pageSize.getHeight();
-          pdf.addPage();
-          pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
-          heightLeft -= pdf.internal.pageSize.getHeight();
-        }
-
-        pdf.save("deniz_durumu_tablosu.pdf");
-
-        // 2. IMG'leri geri yükle
-        imgBackup.forEach(entry => {
-          entry.placeholder.replaceWith(entry.original);
-        });
-
-        overlay.style.display = "none";
-      });
-    });
-  </script>
-
 </body>
 
 </html>

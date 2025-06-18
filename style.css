@@ -11,6 +11,7 @@ body {
   max-width: 1000px;
   margin: auto;
   padding: 20px;
+  position: relative;
 }
 
 h1 {
@@ -43,11 +44,15 @@ button:hover {
   background: white;
   border-radius: 6px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  /* PDF öncesi snapshot için genişletilebilir alan olsun */
+  width: 100%;
 }
 
 table {
-  width: 100%;
   border-collapse: collapse;
+  margin: 0 auto;
+  background-color: white;
+  width: max-content;
   min-width: 900px;
 }
 
@@ -65,10 +70,6 @@ thead {
   position: sticky;
   top: 0;
   z-index: 1;
-}
-
-/* ✅ Başlıklar PDF'de ve canlı sayfada görünür kalsın */
-thead {
   display: table-header-group !important;
 }
 
@@ -120,5 +121,10 @@ tbody tr:hover {
 
   .container {
     padding: 10px;
+  }
+
+  .table-container {
+    /* Mobilde başlangıçta otomatik zoom yerine scroll öncelikli yap */
+    overflow-x: scroll;
   }
 }

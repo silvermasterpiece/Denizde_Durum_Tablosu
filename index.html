@@ -7,7 +7,7 @@
   <title>Denizde Durum Tablosu</title>
   <link rel="stylesheet" href="style.css" />
 
-  <!-- jsPDF ve html2canvas -->
+  <!-- Gerekli kütüphaneler -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
@@ -15,7 +15,17 @@
 <body>
   <div class="container">
     <h1>Denizde Durum Tablosu</h1>
-    <button id="downloadPdfButton">📄 Tabloyu PDF Olarak İndir</button>
+
+    <div id="lastUpdate" style="
+      position:absolute;
+      top:10px; right:10px;
+      background:#fff8e1;
+      padding:6px 12px;
+      border-radius:8px;
+      box-shadow:0 0 5px rgba(0,0,0,0.2);
+      font-size:14px;"></div>
+
+    <button id="downloadPdfButton">📄 PDF İndir</button>
 
     <div class="table-container" id="table-to-print">
       <table id="main-table">
@@ -25,13 +35,15 @@
     </div>
   </div>
 
-  <!-- PDF Hazırlanıyor Perdesi -->
-  <div id="pdf-overlay">PDF hazırlanıyor, lütfen bekleyin...</div>
+  <div id="pdf-overlay" style="
+    display:none; position:fixed; top:0; left:0; right:0; bottom:0;
+    background:rgba(255,255,255,0.9); color:#333;
+    font-size:20px; font-weight:bold; text-align:center;
+    justify-content:center; align-items:center; z-index:9999;">PDF hazırlanıyor, lütfen bekleyin...</div>
 
   <!-- app.js -->
   <script src="app.js"></script>
 
-  <!-- 📄 Görsel tabanlı PDF indirme -->
   <script>
     document.getElementById("downloadPdfButton").addEventListener("click", () => {
       const overlay = document.getElementById("pdf-overlay");
@@ -39,11 +51,10 @@
 
       const tableElement = document.getElementById("table-to-print");
 
-      // 1. IMG'leri ALT değeri içeren span ile değiştir
       const imgElements = tableElement.querySelectorAll("img");
       const imgBackup = [];
 
-      imgElements.forEach((img, index) => {
+      imgElements.forEach((img) => {
         const altText = img.alt || "Resim";
         const span = document.createElement("span");
         span.textContent = altText;
@@ -51,20 +62,18 @@
         span.style.color = "#d32f2f";
         span.style.fontStyle = "italic";
         span.style.fontWeight = "bold";
-        span.style.textAlign = "center";
         span.style.padding = "4px";
 
-        // IMG yedeği al ve span ile değiştir
-        imgBackup.push({ parent: img.parentNode, original: img, placeholder: span });
+        imgBackup.push({ original: img, placeholder: span });
         img.replaceWith(span);
       });
 
       html2canvas(tableElement, {
         scale: 3,
         scrollX: 0,
-        scrollY: -window.scrollY,
-        windowWidth: document.body.scrollWidth,
-        windowHeight: document.body.scrollHeight
+        scrollY: 0,
+        width: tableElement.scrollWidth,
+        height: tableElement.scrollHeight
       }).then(canvas => {
         const imgData = canvas.toDataURL("image/png");
         const pdf = new jspdf.jsPDF("l", "mm", "a4");
@@ -86,7 +95,6 @@
 
         pdf.save("deniz_durumu_tablosu.pdf");
 
-        // 2. IMG'leri geri yükle
         imgBackup.forEach(entry => {
           entry.placeholder.replaceWith(entry.original);
         });
@@ -95,7 +103,6 @@
       });
     });
   </script>
-
 </body>
 
 </html>

@@ -74,9 +74,11 @@ document.addEventListener("DOMContentLoaded", () => {
     html2canvas(element, {
       scale: 3,
       scrollX: 0,
-      scrollY: -window.scrollY,
-      windowWidth: document.body.scrollWidth,
-      windowHeight: document.body.scrollHeight
+      scrollY: 0,
+      width: element.scrollWidth,
+      height: element.scrollHeight,
+      useCORS: true,
+      allowTaint: false
     }).then(canvas => {
       const image = canvas.toDataURL("image/png");
       const link = document.createElement('a');

@@ -46,7 +46,13 @@ document.addEventListener("DOMContentLoaded", () => {
         else if (imgPath.includes("parcalibulutlu")) emoji = "🌥️";
         else if (imgPath.includes("kapali")) emoji = "☁️";
         else if (imgPath.includes("yagmurlu")) emoji = "🌧️";
-        else if (imgPath.includes("cokbulutlu")) emoji = "🌦️";
+        else if (imgPath.includes("cokbulutlu")) emoji = "☁️";
+        else if (imgPath.includes("sisli")) emoji = "🌫️";
+        else if (imgPath.includes("kar")) emoji = "❄️";
+        else if (imgPath.includes("karsimsi")) emoji = "🌨️";
+        else if (imgPath.includes("dolu")) emoji = "🌩️";
+        else if (imgPath.includes("firtina")) emoji = "🌪️";
+               
         return `<img src="https://dts.mgm.gov.tr/dts/v1/${imgPath}" alt="${emoji}">`;
       };
 
@@ -67,24 +73,4 @@ document.addEventListener("DOMContentLoaded", () => {
         tableBody.appendChild(row);
       });
     });
-
-  document.getElementById("downloadPngButton").addEventListener("click", () => {
-    const element = document.getElementById("table-to-print");
-
-    html2canvas(element, {
-      scale: 3,
-      scrollX: 0,
-      scrollY: 0,
-      width: element.scrollWidth,
-      height: element.scrollHeight,
-      useCORS: true,
-      allowTaint: false
-    }).then(canvas => {
-      const image = canvas.toDataURL("image/png");
-      const link = document.createElement('a');
-      link.href = image;
-      link.download = 'deniz_durumu_tablosu.png';
-      link.click();
-    });
-  });
 });

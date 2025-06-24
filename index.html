@@ -7,15 +7,15 @@
   <title>Denizde Durum Tablosu</title>
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Gerekli kütüphaneler -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- PDF ile ilgili kütüphaneler KALDIRILDI -->
+
 </head>
 
 <body>
   <div class="container">
     <h1>Denizde Durum Tablosu</h1>
 
+    <!-- "Son Güncelleme" bilgisi için alan (isteğe bağlı, kalabilir) -->
     <div id="lastUpdate" style="
       position:absolute;
       top:10px; right:10px;
@@ -25,7 +25,7 @@
       box-shadow:0 0 5px rgba(0,0,0,0.2);
       font-size:14px;"></div>
 
-    <button id="downloadPdfButton">📄 PDF İndir</button>
+    <!-- PDF İndirme butonu KALDIRILDI -->
 
     <div class="table-container" id="table-to-print">
       <table id="main-table">
@@ -35,74 +35,11 @@
     </div>
   </div>
 
-  <div id="pdf-overlay" style="
-    display:none; position:fixed; top:0; left:0; right:0; bottom:0;
-    background:rgba(255,255,255,0.9); color:#333;
-    font-size:20px; font-weight:bold; text-align:center;
-    justify-content:center; align-items:center; z-index:9999;">PDF hazırlanıyor, lütfen bekleyin...</div>
-
-  <!-- app.js -->
+  <!-- app.js dosyası çağrılıyor (bunun içindeki PDF kodunu da silmek gerekecek) -->
   <script src="app.js"></script>
 
-  <script>
-    document.getElementById("downloadPdfButton").addEventListener("click", () => {
-      const overlay = document.getElementById("pdf-overlay");
-      overlay.style.display = "flex";
+  <!-- PDF indirme ile ilgili olan tüm script bloğu KALDIRILDI -->
 
-      const tableElement = document.getElementById("table-to-print");
-
-      const imgElements = tableElement.querySelectorAll("img");
-      const imgBackup = [];
-
-      imgElements.forEach((img) => {
-        const altText = img.alt || "Resim";
-        const span = document.createElement("span");
-        span.textContent = altText;
-        span.style.display = "inline-block";
-        span.style.color = "#d32f2f";
-        span.style.fontStyle = "italic";
-        span.style.fontWeight = "bold";
-        span.style.padding = "4px";
-
-        imgBackup.push({ original: img, placeholder: span });
-        img.replaceWith(span);
-      });
-
-      html2canvas(tableElement, {
-        scale: 3,
-        scrollX: 0,
-        scrollY: 0,
-        width: tableElement.scrollWidth,
-        height: tableElement.scrollHeight
-      }).then(canvas => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jspdf.jsPDF("l", "mm", "a4");
-
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const imgHeight = canvas.height * pdfWidth / canvas.width;
-        let heightLeft = imgHeight;
-        let position = 0;
-
-        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
-        heightLeft -= pdf.internal.pageSize.getHeight();
-
-        while (heightLeft > 0) {
-          position -= pdf.internal.pageSize.getHeight();
-          pdf.addPage();
-          pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
-          heightLeft -= pdf.internal.pageSize.getHeight();
-        }
-
-        pdf.save("deniz_durumu_tablosu.pdf");
-
-        imgBackup.forEach(entry => {
-          entry.placeholder.replaceWith(entry.original);
-        });
-
-        overlay.style.display = "none";
-      });
-    });
-  </script>
 </body>
 
 </html>

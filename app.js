@@ -20,27 +20,17 @@ document.addEventListener("DOMContentLoaded", () => {
         </tr>
       `;
 
-      const getDirectionIcon = (imgPath) => {
-        if (!imgPath) return "";
-        return `<img src="${imgPath}" style="width: 40px;">`;
-      };
-
-      const getWeatherIcon = (imgPath) => {
-        if (!imgPath) return "";
-        return `<img src="${imgPath}" style="width: 40px;">`;
-      };
-
       data.forEach(item => {
         const row = document.createElement("tr");
         row.innerHTML = `
           <td>${item["Tarih/Saat"]}</td>
-          <td>${getDirectionIcon(item["Ruzgar Yonu"])}</td>
+          <td><img src="${item["Ruzgar Yonu"]}" style="width: 35px;"></td>
           <td>${item["Hizi (knot)"]}</td>
           <td>${item["Hizi (bofor)"]}</td>
-          <td>${getDirectionIcon(item["Dalga Yonu"])}</td>
+          <td><img src="${item["Dalga Yonu"]}" style="width: 35px;"></td>
           <td>${item["Yuksekligi (m)"]}</td>
           <td>${item["Peryod (sn)"]}</td>
-          <td>${getWeatherIcon(item["Hava Durumu"])}</td>
+          <td><img src="${item["Hava Durumu"]}" style="width: 35px;"></td>
           <td>${item["Sicaklik (C)"]}</td>
           <td>${item["Basinc (mb)"]}</td>
         `;

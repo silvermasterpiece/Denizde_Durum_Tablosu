@@ -1,6 +1,5 @@
 [
     {
-<<<<<<< HEAD
         "Tarih/Saat": "Pzt 23-Haz 15:00",
         "Ruzgar Yonu": "img/96c.png",
         "Hizi (knot)": "3",
@@ -20,82 +19,12 @@
         "Dalga Yonu": "img/337e.png",
         "Yuksekligi (m)": "0.0",
         "Peryod (sn)": "4",
-=======
-        "Tarih/Saat": "Pzt 23-Haz 03:00",
-        "Ruzgar Yonu": "img/234c.png",
-        "Hizi (knot)": "6",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/242e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "2",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "19.1",
-        "Basinc (mb)": "1016"
-    },
-    {
-        "Tarih/Saat": "Pzt 23-Haz 06:00",
-        "Ruzgar Yonu": "img/134c.png",
-        "Hizi (knot)": "0",
-        "Hizi (bofor)": 0,
-        "Dalga Yonu": "img/9999e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "2",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "19.8",
-        "Basinc (mb)": "1016"
-    },
-    {
-        "Tarih/Saat": "Pzt 23-Haz 09:00",
-        "Ruzgar Yonu": "img/79c.png",
-        "Hizi (knot)": "6",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/9999e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "2",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "19.9",
-        "Basinc (mb)": "1016"
-    },
-    {
-        "Tarih/Saat": "Pzt 23-Haz 12:00",
-        "Ruzgar Yonu": "img/28c.png",
-        "Hizi (knot)": "6",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/7e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "2",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "20.8",
-        "Basinc (mb)": "1015"
-    },
-    {
-        "Tarih/Saat": "Pzt 23-Haz 15:00",
-        "Ruzgar Yonu": "img/125c.png",
-        "Hizi (knot)": "2",
-        "Hizi (bofor)": 1,
-        "Dalga Yonu": "img/339e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "3",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "21.2",
-        "Basinc (mb)": "1016"
-    },
-    {
-        "Tarih/Saat": "Pzt 23-Haz 18:00",
-        "Ruzgar Yonu": "img/172c.png",
-        "Hizi (knot)": "7",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/336e.png",
-        "Yuksekligi (m)": "0.1",
-        "Peryod (sn)": "5",
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
         "Hava Durumu": "img/acik-gece.png",
         "Sicaklik (C)": "22.0",
         "Basinc (mb)": "1017"
     },
     {
         "Tarih/Saat": "Pzt 23-Haz 21:00",
-<<<<<<< HEAD
         "Ruzgar Yonu": "img/210c.png",
         "Hizi (knot)": "7",
         "Hizi (bofor)": 3,
@@ -104,32 +33,17 @@
         "Peryod (sn)": "3",
         "Hava Durumu": "img/acik-gece.png",
         "Sicaklik (C)": "21.9",
-=======
-        "Ruzgar Yonu": "img/233c.png",
-        "Hizi (knot)": "7",
-        "Hizi (bofor)": 3,
-        "Dalga Yonu": "img/331e.png",
-        "Yuksekligi (m)": "0.4",
-        "Peryod (sn)": "5",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "21.7",
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
         "Basinc (mb)": "1016"
     },
     {
         "Tarih/Saat": "Sal 24-Haz 00:00",
         "Ruzgar Yonu": "img/233c.png",
-<<<<<<< HEAD
         "Hizi (knot)": "7",
-=======
-        "Hizi (knot)": "6",
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
         "Hizi (bofor)": 2,
         "Dalga Yonu": "img/305e.png",
         "Yuksekligi (m)": "0.0",
         "Peryod (sn)": "3",
         "Hava Durumu": "img/acik-gece.png",
-<<<<<<< HEAD
         "Sicaklik (C)": "20.8",
         "Basinc (mb)": "1015"
     },
@@ -143,26 +57,10 @@
         "Peryod (sn)": "5",
         "Hava Durumu": "img/acik-gece.png",
         "Sicaklik (C)": "21.0",
-=======
-        "Sicaklik (C)": "20.9",
-        "Basinc (mb)": "1016"
-    },
-    {
-        "Tarih/Saat": "Sal 24-Haz 03:00",
-        "Ruzgar Yonu": "img/263c.png",
-        "Hizi (knot)": "7",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/327e.png",
-        "Yuksekligi (m)": "0.5",
-        "Peryod (sn)": "5",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "20.8",
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
         "Basinc (mb)": "1016"
     },
     {
         "Tarih/Saat": "Sal 24-Haz 06:00",
-<<<<<<< HEAD
         "Ruzgar Yonu": "img/349c.png",
         "Hizi (knot)": "5",
         "Hizi (bofor)": 2,
@@ -195,45 +93,10 @@
         "Peryod (sn)": "5",
         "Hava Durumu": "img/acik-gunduz.png",
         "Sicaklik (C)": "21.6",
-=======
-        "Ruzgar Yonu": "img/342c.png",
-        "Hizi (knot)": "4",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/327e.png",
-        "Yuksekligi (m)": "0.5",
-        "Peryod (sn)": "5",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "21.3",
-        "Basinc (mb)": "1016"
-    },
-    {
-        "Tarih/Saat": "Sal 24-Haz 09:00",
-        "Ruzgar Yonu": "img/44c.png",
-        "Hizi (knot)": "6",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/328e.png",
-        "Yuksekligi (m)": "0.4",
-        "Peryod (sn)": "5",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "20.4",
-        "Basinc (mb)": "1016"
-    },
-    {
-        "Tarih/Saat": "Sal 24-Haz 12:00",
-        "Ruzgar Yonu": "img/39c.png",
-        "Hizi (knot)": "7",
-        "Hizi (bofor)": 3,
-        "Dalga Yonu": "img/330e.png",
-        "Yuksekligi (m)": "0.4",
-        "Peryod (sn)": "4",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "21.4",
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
         "Basinc (mb)": "1016"
     },
     {
         "Tarih/Saat": "Sal 24-Haz 15:00",
-<<<<<<< HEAD
         "Ruzgar Yonu": "img/73c.png",
         "Hizi (knot)": "4",
         "Hizi (bofor)": 2,
@@ -242,21 +105,10 @@
         "Peryod (sn)": "4",
         "Hava Durumu": "img/acik-gunduz.png",
         "Sicaklik (C)": "21.8",
-=======
-        "Ruzgar Yonu": "img/79c.png",
-        "Hizi (knot)": "4",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/330e.png",
-        "Yuksekligi (m)": "0.3",
-        "Peryod (sn)": "4",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "21.5",
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
         "Basinc (mb)": "1015"
     },
     {
         "Tarih/Saat": "Sal 24-Haz 18:00",
-<<<<<<< HEAD
         "Ruzgar Yonu": "img/112c.png",
         "Hizi (knot)": "4",
         "Hizi (bofor)": 2,
@@ -265,21 +117,10 @@
         "Peryod (sn)": "4",
         "Hava Durumu": "img/acik-gece.png",
         "Sicaklik (C)": "22.1",
-=======
-        "Ruzgar Yonu": "img/118c.png",
-        "Hizi (knot)": "5",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/329e.png",
-        "Yuksekligi (m)": "0.2",
-        "Peryod (sn)": "4",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "21.8",
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
         "Basinc (mb)": "1015"
     },
     {
         "Tarih/Saat": "Sal 24-Haz 21:00",
-<<<<<<< HEAD
         "Ruzgar Yonu": "img/151c.png",
         "Hizi (knot)": "5",
         "Hizi (bofor)": 2,
@@ -300,28 +141,6 @@
         "Peryod (sn)": "4",
         "Hava Durumu": "img/acik-gece.png",
         "Sicaklik (C)": "20.2",
-=======
-        "Ruzgar Yonu": "img/134c.png",
-        "Hizi (knot)": "6",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/327e.png",
-        "Yuksekligi (m)": "0.2",
-        "Peryod (sn)": "4",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "21.2",
-        "Basinc (mb)": "1014"
-    },
-    {
-        "Tarih/Saat": "Çrş 25-Haz 00:00",
-        "Ruzgar Yonu": "img/142c.png",
-        "Hizi (knot)": "6",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/325e.png",
-        "Yuksekligi (m)": "0.1",
-        "Peryod (sn)": "4",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "20.0",
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
         "Basinc (mb)": "1014"
     },
     {
@@ -329,24 +148,15 @@
         "Ruzgar Yonu": "img/152c.png",
         "Hizi (knot)": "6",
         "Hizi (bofor)": 2,
-<<<<<<< HEAD
         "Dalga Yonu": "img/331e.png",
         "Yuksekligi (m)": "0.1",
         "Peryod (sn)": "4",
         "Hava Durumu": "img/acik-gece.png",
         "Sicaklik (C)": "19.8",
-=======
-        "Dalga Yonu": "img/324e.png",
-        "Yuksekligi (m)": "0.1",
-        "Peryod (sn)": "4",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "19.7",
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
         "Basinc (mb)": "1014"
     },
     {
         "Tarih/Saat": "Çrş 25-Haz 06:00",
-<<<<<<< HEAD
         "Ruzgar Yonu": "img/108c.png",
         "Hizi (knot)": "8",
         "Hizi (bofor)": 3,
@@ -355,21 +165,10 @@
         "Peryod (sn)": "4",
         "Hava Durumu": "img/acik-gunduz.png",
         "Sicaklik (C)": "20.9",
-=======
-        "Ruzgar Yonu": "img/110c.png",
-        "Hizi (knot)": "8",
-        "Hizi (bofor)": 3,
-        "Dalga Yonu": "img/324e.png",
-        "Yuksekligi (m)": "0.1",
-        "Peryod (sn)": "4",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "20.8",
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
         "Basinc (mb)": "1014"
     },
     {
         "Tarih/Saat": "Çrş 25-Haz 09:00",
-<<<<<<< HEAD
         "Ruzgar Yonu": "img/73c.png",
         "Hizi (knot)": "12",
         "Hizi (bofor)": 4,
@@ -378,21 +177,10 @@
         "Peryod (sn)": "3",
         "Hava Durumu": "img/acik-gunduz.png",
         "Sicaklik (C)": "21.3",
-=======
-        "Ruzgar Yonu": "img/69c.png",
-        "Hizi (knot)": "11",
-        "Hizi (bofor)": 4,
-        "Dalga Yonu": "img/7e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "3",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "21.1",
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
         "Basinc (mb)": "1014"
     },
     {
         "Tarih/Saat": "Çrş 25-Haz 12:00",
-<<<<<<< HEAD
         "Ruzgar Yonu": "img/75c.png",
         "Hizi (knot)": "11",
         "Hizi (bofor)": 3,
@@ -401,21 +189,10 @@
         "Peryod (sn)": "2",
         "Hava Durumu": "img/acik-gunduz.png",
         "Sicaklik (C)": "21.8",
-=======
-        "Ruzgar Yonu": "img/72c.png",
-        "Hizi (knot)": "10",
-        "Hizi (bofor)": 3,
-        "Dalga Yonu": "img/73e.png",
-        "Yuksekligi (m)": "0.1",
-        "Peryod (sn)": "2",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "21.4",
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
         "Basinc (mb)": "1013"
     },
     {
         "Tarih/Saat": "Çrş 25-Haz 15:00",
-<<<<<<< HEAD
         "Ruzgar Yonu": "img/86c.png",
         "Hizi (knot)": "10",
         "Hizi (bofor)": 3,
@@ -424,21 +201,10 @@
         "Peryod (sn)": "2",
         "Hava Durumu": "img/acik-gunduz.png",
         "Sicaklik (C)": "22.4",
-=======
-        "Ruzgar Yonu": "img/85c.png",
-        "Hizi (knot)": "9",
-        "Hizi (bofor)": 3,
-        "Dalga Yonu": "img/83e.png",
-        "Yuksekligi (m)": "0.1",
-        "Peryod (sn)": "2",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "22.2",
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
         "Basinc (mb)": "1012"
     },
     {
         "Tarih/Saat": "Çrş 25-Haz 18:00",
-<<<<<<< HEAD
         "Ruzgar Yonu": "img/111c.png",
         "Hizi (knot)": "9",
         "Hizi (bofor)": 3,
@@ -446,116 +212,10 @@
         "Yuksekligi (m)": "0.3",
         "Peryod (sn)": "2",
         "Hava Durumu": "img/acik-gece.png",
-=======
-        "Ruzgar Yonu": "img/102c.png",
-        "Hizi (knot)": "7",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/87e.png",
-        "Yuksekligi (m)": "0.1",
-        "Peryod (sn)": "2",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "22.4",
-        "Basinc (mb)": "1013"
-    },
-    {
-        "Tarih/Saat": "Çrş 25-Haz 21:00",
-        "Ruzgar Yonu": "img/120c.png",
-        "Hizi (knot)": "5",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/89e.png",
-        "Yuksekligi (m)": "0.1",
-        "Peryod (sn)": "2",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "21.8",
-        "Basinc (mb)": "1013"
-    },
-    {
-        "Tarih/Saat": "Prş 26-Haz 00:00",
-        "Ruzgar Yonu": "img/146c.png",
-        "Hizi (knot)": "3",
-        "Hizi (bofor)": 1,
-        "Dalga Yonu": "img/96e.png",
-        "Yuksekligi (m)": "0.2",
-        "Peryod (sn)": "3",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "21.1",
-        "Basinc (mb)": "1013"
-    },
-    {
-        "Tarih/Saat": "Prş 26-Haz 03:00",
-        "Ruzgar Yonu": "img/161c.png",
-        "Hizi (knot)": "2",
-        "Hizi (bofor)": 1,
-        "Dalga Yonu": "img/94e.png",
-        "Yuksekligi (m)": "0.1",
-        "Peryod (sn)": "3",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "21.4",
-        "Basinc (mb)": "1013"
-    },
-    {
-        "Tarih/Saat": "Prş 26-Haz 06:00",
-        "Ruzgar Yonu": "img/96c.png",
-        "Hizi (knot)": "5",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/92e.png",
-        "Yuksekligi (m)": "0.1",
-        "Peryod (sn)": "3",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "21.4",
-        "Basinc (mb)": "1013"
-    },
-    {
-        "Tarih/Saat": "Prş 26-Haz 09:00",
-        "Ruzgar Yonu": "img/68c.png",
-        "Hizi (knot)": "6",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/92e.png",
-        "Yuksekligi (m)": "0.1",
-        "Peryod (sn)": "3",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "21.0",
-        "Basinc (mb)": "1013"
-    },
-    {
-        "Tarih/Saat": "Prş 26-Haz 12:00",
-        "Ruzgar Yonu": "img/77c.png",
-        "Hizi (knot)": "7",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/94e.png",
-        "Yuksekligi (m)": "0.1",
-        "Peryod (sn)": "3",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "21.2",
-        "Basinc (mb)": "1012"
-    },
-    {
-        "Tarih/Saat": "Prş 26-Haz 15:00",
-        "Ruzgar Yonu": "img/70c.png",
-        "Hizi (knot)": "5",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/92e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "3",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "21.9",
-        "Basinc (mb)": "1012"
-    },
-    {
-        "Tarih/Saat": "Prş 26-Haz 18:00",
-        "Ruzgar Yonu": "img/120c.png",
-        "Hizi (knot)": "3",
-        "Hizi (bofor)": 1,
-        "Dalga Yonu": "img/90e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "3",
-        "Hava Durumu": "img/acik-gece.png",
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
         "Sicaklik (C)": "22.5",
         "Basinc (mb)": "1013"
     },
     {
-<<<<<<< HEAD
         "Tarih/Saat": "Çrş 25-Haz 21:00",
         "Ruzgar Yonu": "img/117c.png",
         "Hizi (knot)": "6",
@@ -756,21 +416,10 @@
         "Yuksekligi (m)": "0.1",
         "Peryod (sn)": "4",
         "Hava Durumu": "img/parcalibulutlu.png",
-=======
-        "Tarih/Saat": "Prş 26-Haz 21:00",
-        "Ruzgar Yonu": "img/153c.png",
-        "Hizi (knot)": "4",
-        "Hizi (bofor)": 1,
-        "Dalga Yonu": "img/85e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "3",
-        "Hava Durumu": "img/acik-gece.png",
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
         "Sicaklik (C)": "22.8",
         "Basinc (mb)": "1012"
     },
     {
-<<<<<<< HEAD
         "Tarih/Saat": "Cts 28-Haz 00:00",
         "Ruzgar Yonu": "img/331c.png",
         "Hizi (knot)": "5",
@@ -829,113 +478,5 @@
         "Hava Durumu": "img/acik-gunduz.png",
         "Sicaklik (C)": "22.3",
         "Basinc (mb)": "1008"
-=======
-        "Tarih/Saat": "Cum 27-Haz 00:00",
-        "Ruzgar Yonu": "img/169c.png",
-        "Hizi (knot)": "4",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/84e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "2",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "22.0",
-        "Basinc (mb)": "1012"
-    },
-    {
-        "Tarih/Saat": "Cum 27-Haz 03:00",
-        "Ruzgar Yonu": "img/166c.png",
-        "Hizi (knot)": "5",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/58e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "2",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "22.0",
-        "Basinc (mb)": "1012"
-    },
-    {
-        "Tarih/Saat": "Cum 27-Haz 06:00",
-        "Ruzgar Yonu": "img/92c.png",
-        "Hizi (knot)": "5",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/4e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "3",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "22.4",
-        "Basinc (mb)": "1012"
-    },
-    {
-        "Tarih/Saat": "Cum 27-Haz 09:00",
-        "Ruzgar Yonu": "img/62c.png",
-        "Hizi (knot)": "7",
-        "Hizi (bofor)": 3,
-        "Dalga Yonu": "img/31e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "3",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "21.8",
-        "Basinc (mb)": "1012"
-    },
-    {
-        "Tarih/Saat": "Cum 27-Haz 12:00",
-        "Ruzgar Yonu": "img/64c.png",
-        "Hizi (knot)": "7",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/26e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "3",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "22.5",
-        "Basinc (mb)": "1011"
-    },
-    {
-        "Tarih/Saat": "Cum 27-Haz 15:00",
-        "Ruzgar Yonu": "img/91c.png",
-        "Hizi (knot)": "6",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/328e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "5",
-        "Hava Durumu": "img/acik-gunduz.png",
-        "Sicaklik (C)": "23.0",
-        "Basinc (mb)": "1009"
-    },
-    {
-        "Tarih/Saat": "Cum 27-Haz 18:00",
-        "Ruzgar Yonu": "img/112c.png",
-        "Hizi (knot)": "6",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/322e.png",
-        "Yuksekligi (m)": "0.0",
-        "Peryod (sn)": "5",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "23.7",
-        "Basinc (mb)": "1009"
-    },
-    {
-        "Tarih/Saat": "Cum 27-Haz 21:00",
-        "Ruzgar Yonu": "img/106c.png",
-        "Hizi (knot)": "5",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/320e.png",
-        "Yuksekligi (m)": "0.1",
-        "Peryod (sn)": "5",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "23.0",
-        "Basinc (mb)": "1008"
-    },
-    {
-        "Tarih/Saat": "Cts 28-Haz 00:00",
-        "Ruzgar Yonu": "img/136c.png",
-        "Hizi (knot)": "5",
-        "Hizi (bofor)": 2,
-        "Dalga Yonu": "img/320e.png",
-        "Yuksekligi (m)": "0.1",
-        "Peryod (sn)": "5",
-        "Hava Durumu": "img/acik-gece.png",
-        "Sicaklik (C)": "22.2",
-        "Basinc (mb)": "1007"
->>>>>>> d621fcebbb7f28ea31f18b3c7c44cf848524d5bc
     }
 ]

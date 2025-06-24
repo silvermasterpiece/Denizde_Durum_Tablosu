@@ -20,29 +20,25 @@ document.addEventListener("DOMContentLoaded", () => {
         </tr>
       `;
 
-      // Ay kısaltmalarını Türkçe çözüm tablosu
       const aylar = {
         "Oca": "01", "Şub": "02", "Mar": "03", "Nis": "04",
         "May": "05", "Haz": "06", "Tem": "07", "Ağu": "08",
         "Eyl": "09", "Eki": "10", "Kas": "11", "Ara": "12"
       };
 
-      // Tarih çevirici
       const parseDate = (tarihStr) => {
-        // Örnek: "Sal 24-Haz 03:00"
         const parts = tarihStr.split(" ");
-        const [gunAy, saat] = parts[1].split(" ");
-        const [gun, ayStr] = gunAy.split("-");
+        const [gun, ayStr] = parts[1].split("-");
+        const saatStr = parts[2];
         const ay = aylar[ayStr];
-        const yil = new Date().getFullYear(); // mevcut yılı al
-        return new Date(`${yil}-${ay}-${gun}T${saat}:00`);
+        const yil = new Date().getFullYear();
+        return new Date(`${yil}-${ay}-${gun}T${saatStr}:00`);
       };
 
       const now = new Date();
 
       data.forEach(item => {
         const veriTarihi = parseDate(item["Tarih/Saat"]);
-
         if (veriTarihi >= now) {
           const row = document.createElement("tr");
           row.innerHTML = `

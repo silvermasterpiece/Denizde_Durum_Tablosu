@@ -20,25 +20,45 @@ document.addEventListener("DOMContentLoaded", () => {
         </tr>
       `;
 
-      const getFullUrl = (path) => {
-        return `https://dts.mgm.gov.tr/dts/v1/${path}`;
+      // Ay kısaltmalarını Türkçe çözüm tablosu
+      const aylar = {
+        "Oca": "01", "Şub": "02", "Mar": "03", "Nis": "04",
+        "May": "05", "Haz": "06", "Tem": "07", "Ağu": "08",
+        "Eyl": "09", "Eki": "10", "Kas": "11", "Ara": "12"
       };
 
+      // Tarih çevirici
+      const parseDate = (tarihStr) => {
+        // Örnek: "Sal 24-Haz 03:00"
+        const parts = tarihStr.split(" ");
+        const [gunAy, saat] = parts[1].split(" ");
+        const [gun, ayStr] = gunAy.split("-");
+        const ay = aylar[ayStr];
+        const yil = new Date().getFullYear(); // mevcut yılı al
+        return new Date(`${yil}-${ay}-${gun}T${saat}:00`);
+      };
+
+      const now = new Date();
+
       data.forEach(item => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${item["Tarih/Saat"]}</td>
-          <td><img src="${getFullUrl(item["Ruzgar Yonu"])}"></td>
-          <td>${item["Hizi (knot)"]}</td>
-          <td>${item["Hizi (bofor)"]}</td>
-          <td><img src="${getFullUrl(item["Dalga Yonu"])}"></td>
-          <td>${item["Yuksekligi (m)"]}</td>
-          <td>${item["Peryod (sn)"]}</td>
-          <td><img src="${getFullUrl(item["Hava Durumu"])}"></td>
-          <td>${item["Sicaklik (C)"]}</td>
-          <td>${item["Basinc (mb)"]}</td>
-        `;
-        tableBody.appendChild(row);
+        const veriTarihi = parseDate(item["Tarih/Saat"]);
+
+        if (veriTarihi >= now) {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${item["Tarih/Saat"]}</td>
+            <td><img src="https://dts.mgm.gov.tr/dts/v1/${item["Ruzgar Yonu"]}"></td>
+            <td>${item["Hizi (knot)"]}</td>
+            <td>${item["Hizi (bofor)"]}</td>
+            <td><img src="https://dts.mgm.gov.tr/dts/v1/${item["Dalga Yonu"]}"></td>
+            <td>${item["Yuksekligi (m)"]}</td>
+            <td>${item["Peryod (sn)"]}</td>
+            <td><img src="https://dts.mgm.gov.tr/dts/v1/${item["Hava Durumu"]}"></td>
+            <td>${item["Sicaklik (C)"]}</td>
+            <td>${item["Basinc (mb)"]}</td>
+          `;
+          tableBody.appendChild(row);
+        }
       });
     })
     .catch(err => {

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const tableHead = document.querySelector("#main-table thead");
       const tableBody = document.querySelector("#main-table tbody");
 
-      tableHead.innerHTML =
+      tableHead.innerHTML = `
         <tr>
           <th>Tarih/Saat</th>
           <th>Rüzgar<br>Yönü</th>
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <th>Sıcaklık<br>(°C)</th>
           <th>Basınç<br>(mb)</th>
         </tr>
-      ;
+      `;
 
       const getDirectionEmoji = (imgPath) => {
         if (!imgPath) return "";
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         else if (angle >= 202.5 && angle < 247.5) icon = "↙️";
         else if (angle >= 247.5 && angle < 292.5) icon = "⬅️";
         else if (angle >= 292.5 && angle < 337.5) icon = "↖️";
-        return <img src="https://dts.mgm.gov.tr/dts/v1/${imgPath}" alt="${icon}">;
+        return `<img src="https://dts.mgm.gov.tr/dts/v1/${imgPath}" alt="${icon}">`;
       };
 
       const getWeatherEmoji = (imgPath) => {
@@ -53,12 +53,12 @@ document.addEventListener("DOMContentLoaded", () => {
         else if (imgPath.includes("dolu")) emoji = "🌩️";
         else if (imgPath.includes("firtina")) emoji = "🌪️";
 
-        return <img src="https://dts.mgm.gov.tr/dts/v1/${imgPath}" alt="${emoji}">;
+        return `<img src="https://dts.mgm.gov.tr/dts/v1/${imgPath}" alt="${emoji}">`;
       };
 
       data.forEach(item => {
         const row = document.createElement("tr");
-        row.innerHTML =
+        row.innerHTML = `
           <td>${item["Tarih/Saat"]}</td>
           <td>${getDirectionEmoji(item["Ruzgar Yonu"])}</td>
           <td>${item["Hizi (knot)"]}</td>
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${getWeatherEmoji(item["Hava Durumu"])}</td>
           <td>${item["Sicaklik (C)"]}</td>
           <td>${item["Basinc (mb)"]}</td>
-        ;
+        `;
         tableBody.appendChild(row);
       });
     });

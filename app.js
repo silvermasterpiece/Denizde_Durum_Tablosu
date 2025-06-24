@@ -28,13 +28,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const row = document.createElement("tr");
         row.innerHTML = `
           <td>${item["Tarih/Saat"]}</td>
-          <td><img src="${getFullUrl(item["Ruzgar Yonu"])}" style="width: 35px;"></td>
+          <td><img src="${getFullUrl(item["Ruzgar Yonu"])}"></td>
           <td>${item["Hizi (knot)"]}</td>
           <td>${item["Hizi (bofor)"]}</td>
-          <td><img src="${getFullUrl(item["Dalga Yonu"])}" style="width: 35px;"></td>
+          <td><img src="${getFullUrl(item["Dalga Yonu"])}"></td>
           <td>${item["Yuksekligi (m)"]}</td>
           <td>${item["Peryod (sn)"]}</td>
-          <td><img src="${getFullUrl(item["Hava Durumu"])}" style="width: 35px;"></td>
+          <td><img src="${getFullUrl(item["Hava Durumu"])}"></td>
           <td>${item["Sicaklik (C)"]}</td>
           <td>${item["Basinc (mb)"]}</td>
         `;

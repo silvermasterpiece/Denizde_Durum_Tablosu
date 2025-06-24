@@ -1,4 +1,3 @@
-/* Genel Stil */
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background-color: #f0f2f5;
@@ -22,7 +21,6 @@ h1 {
   margin-bottom: 10px;
 }
 
-/* Last Update kutusu */
 #lastUpdate {
   position: absolute;
   top: 10px;
@@ -34,7 +32,6 @@ h1 {
   font-size: 14px;
 }
 
-/* Tablo */
 .table-container {
   overflow-x: auto;
   background: white;

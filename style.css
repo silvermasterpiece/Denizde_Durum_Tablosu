@@ -74,6 +74,6 @@ tbody tr:hover {
 
 /* İkonların boyutunu doğal çözünürlükte ama sınırlı göster */
 .table-container img {
-  max-width: 24px;
+  max-width: 18px;
   height: auto;
 }

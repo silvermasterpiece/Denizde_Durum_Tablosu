@@ -22,17 +22,6 @@ h1 {
   margin-bottom: 10px;
 }
 
-#lastUpdate {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #fff8e1;
-  padding: 6px 12px;
-  border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.2);
-  font-size: 14px;
-}
-
 .table-container {
   overflow-x: auto;
   background: white;
@@ -72,7 +61,7 @@ tbody tr:hover {
   background-color: #e8eaf6;
 }
 
-/* İkonların boyutunu doğal çözünürlükte ama sınırlı göster */
+/* İkon boyutları: MGM orijinal çözünürlüğünü koruyacak, ama maksimum genişlik sınırı var */
 .table-container img {
   max-width: 18px;
   height: auto;
